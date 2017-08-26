@@ -8,7 +8,11 @@ before_install:
   # WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
   - sudo apt-get update -y > /dev/null
   
-install:  
+install:
+  # APC
+  # https://github.com/travis-ci/travis-ci/issues/7390
+  - yes '' | pecl install -f apcu
+  
   # vendor
   - composer install --no-interaction
 
@@ -20,7 +24,7 @@ before_script:
   - mkdir -p build/logs
 
 script:
-  - php vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-clover build/logs/clover.xml tests
+  - php --define apc.enable_cli=1 vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-clover build/logs/clover.xml tests
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v
