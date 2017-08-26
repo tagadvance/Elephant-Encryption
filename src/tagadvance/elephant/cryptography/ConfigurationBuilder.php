@@ -12,18 +12,21 @@ class ConfigurationBuilder {
 
     /**
      * Debian and derivatives, e.g. Ubuntu, Mint, etc...
+     * 
      * @var string
      */
     const CONFIG_DEBIAN = '/etc/ssl/openssl.cnf';
 
     /**
      * RHEL and derivatives, e.g. CentOS, Redhat, Fedora, etc...
+     * 
      * @var string
      */
     const CONFIG_RHEL = '/etc/pki/tls/openssl.cnf';
 
     /**
      * FIXME: windows
+     * 
      * @var string
      */
     const CONFIG_WINDOWS = null;

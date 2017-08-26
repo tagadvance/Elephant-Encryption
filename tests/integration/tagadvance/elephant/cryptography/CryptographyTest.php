@@ -6,7 +6,8 @@ use PHPUnit\Framework\TestCase;
 use tagadvance\gilligan\security\Hash;
 
 /**
- * This is a bit of a hack because I don't want to write unit tests for each class. Eventually, I'd like to break this out into its own library.
+ * This is a bit of a hack because I don't want to write unit tests for each class.
+ * Eventually, I'd like to break this out into its own library.
  */
 class CryptographyTest extends TestCase {
 
@@ -19,21 +20,22 @@ deserunt mollit anim id est laborum.
 DATA;
         
         $configuration = ConfigurationBuilder::builder()
-            ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
-            ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
-            ->setX509Extensions('v3_ca')
-            ->setRequiredExtensions('v3_req')
-            ->setPrivateKeyBits(4096)
-            ->setPrivateKeyType();
+                ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
+                ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
+                ->setX509Extensions('v3_ca')
+                ->setRequiredExtensions('v3_req')
+                ->setPrivateKeyBits(4096)
+                ->setPrivateKeyType();
         $privateKey = PrivateKey::newPrivateKey($configuration);
         try {
-            $dn = DistinguishedNameBuilder::builder()->setCountryName('US')
-                ->setStateOrProvinceName('OR')
-                ->setLocality('Crater Lake')
-                ->setOrganizationName('Acme Corporation')
-                ->setOrganizationUnitName('.')
-                ->setCommonName('Wile E Coyote')
-                ->setEmailAddress('w.coyote@acme.com');
+            $dn = DistinguishedNameBuilder::builder()
+                    ->setCountryName('US')
+                    ->setStateOrProvinceName('OR')
+                    ->setLocality('Crater Lake')
+                    ->setOrganizationName('Acme Corporation')
+                    ->setOrganizationUnitName('.')
+                    ->setCommonName('Wile E Coyote')
+                    ->setEmailAddress('w.coyote@acme.com');
             $csr = CertificateSigningRequest::newCertificateSigningRequest($dn, $privateKey);
             $certificate = $csr->sign($privateKey);
             try {
