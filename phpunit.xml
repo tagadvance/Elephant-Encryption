@@ -1,0 +1,14 @@
+<phpunit bootstrap="./bootstrap.php" colors="false">
+	<testsuite name="ElephantEncryptionTests">
+		<directory>./</directory>
+	</testsuite>
+
+	<filter>
+		<whitelist>
+			<directory suffix=".php">./src</directory>
+			<exclude>
+				<directory suffix=".php">./tests</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>
