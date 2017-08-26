@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/tagadvance/Elephant-Encryption.svg?branch=master)](https://travis-ci.org/tagadvance/Elephant-Encryption)
+[![Coverage Status](https://coveralls.io/repos/github/tagadvance/Elephant-Encryption/badge.svg?branch=master)](https://coveralls.io/github/tagadvance/Elephant-Encryption?branch=master)
+
 # Elephant Encryption
 
 Elephant Encryption was originally a part of [https://github.com/tagadvance/Gilligan](Gilligan). Please bear in mind that while the encryption itself is very strong, data is only as secure as the server storing the private key.
