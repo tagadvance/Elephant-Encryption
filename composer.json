@@ -12,6 +12,7 @@
 	"require" : {
 		"php" : "^7.1",
 		"ext-openssl": "*",
+		"tagadvance/gilligan": "dev-master",
 		"satooshi/php-coveralls": "^1.0"
 	},
 	"require-dev" : {
