@@ -79,9 +79,10 @@ class PrivateKeyTest extends TestCase {
             
             $path = '/tmp/elephant.key';
             $file = new \SplFileInfo($path);
-            $export = $key->export($file, $password = null, $configuration = null);
+            $export = $key->export($file);
             
-            $this->assertEquals($expected = 3414, $actual = strlen($export));
+            $this->assertStringStartsWith($prefix = '-----BEGIN', $export);
+            $this->assertStringEndsWith($prefix = 'PRIVATE KEY-----', trim($export));
         } finally {
             $key->close();
         }
@@ -97,7 +98,9 @@ class PrivateKeyTest extends TestCase {
             $file = new \SplFileInfo($path);
             $key->exportToFile($file, $password = null, $configuration = null);
             
-            $this->assertEquals($expected = 3268, $actual = $file->getSize());
+            $export = file_get_contents($path);
+            $this->assertStringStartsWith($prefix = '-----BEGIN', $export);
+            $this->assertStringEndsWith($prefix = 'PRIVATE KEY-----', trim($export));
         } finally {
             $key->close();
         }
