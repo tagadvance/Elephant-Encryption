@@ -21,9 +21,13 @@ class PrivateKey implements Closeable {
      */
     static function newPrivateKey(ConfigurationBuilder $builder): self {
         $configArgs = $builder->build();
-        $key = openssl_pkey_new($configArgs);
-        if ($key === false) {
-            throw new CryptographyException('could not create private key');
+        try {
+            $key = openssl_pkey_new($configArgs);
+            if ($key === false) {
+                throw new CryptographyException('could not create private key');
+            }
+        } catch (\Throwable $t) {
+            throw new CryptographyException('could not create private key', $code = null, $t);
         }
         return new self($key);
     }
@@ -68,7 +72,7 @@ class PrivateKey implements Closeable {
     function getDetails(): array {
         $details = openssl_pkey_get_details($this->key);
         if ($details === false) {
-            throw new CryptographyException();
+            throw new CryptographyException('could not get details');
         }
         return $details;
     }
@@ -91,13 +95,13 @@ class PrivateKey implements Closeable {
     /**
      *
      * @param string $password
-     * @param array $config
+     * @param array $configuration
      * @throws CryptographyException
      * @return string
      */
-    function export(string $password = null, array $config = null): string {
+    function export(string $password = null, array $configuration = null): string {
         $output = '';
-        $isExported = openssl_pkey_export($this->key, $output, $password, $config);
+        $isExported = openssl_pkey_export($this->key, $output, $password, $configuration);
         if (! $isExported) {
             throw new CryptographyException('private key could not be exported');
         }
@@ -108,13 +112,13 @@ class PrivateKey implements Closeable {
      *
      * @param \SplFileInfo $file
      * @param string $password
-     * @param array $config
+     * @param array $configuration
      * @throws CryptographyException
      * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
      */
-    function exportToFile(\SplFileInfo $file, string $password = null, array $config = null): void {
+    function exportToFile(\SplFileInfo $file, string $password = null, array $configuration = null): void {
         $path = $file->getPathname();
-        $result = openssl_pkey_export_to_file($this->key, $path, $password, $config);
+        $result = openssl_pkey_export_to_file($this->key, $path, $password, $configuration);
         if (! $result) {
             throw new CryptographyException('private key could not be saved');
         }
