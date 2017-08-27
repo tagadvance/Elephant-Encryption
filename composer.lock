@@ -672,12 +672,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tagadvance/Gilligan.git",
-                "reference": "a394aa056d5ebf0a6ae87f5337ed091d27bec346"
+                "reference": "ac60eeaaa27669645ed97ac8f99601c68d00bbb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tagadvance/Gilligan/zipball/a394aa056d5ebf0a6ae87f5337ed091d27bec346",
-                "reference": "a394aa056d5ebf0a6ae87f5337ed091d27bec346",
+                "url": "https://api.github.com/repos/tagadvance/Gilligan/zipball/ac60eeaaa27669645ed97ac8f99601c68d00bbb3",
+                "reference": "ac60eeaaa27669645ed97ac8f99601c68d00bbb3",
                 "shasum": ""
             },
             "require": {
@@ -708,7 +708,7 @@
                 }
             ],
             "description": "...",
-            "time": "2017-08-26 23:06:52"
+            "time": "2017-08-27 00:19:48"
         }
     ],
     "packages-dev": [
