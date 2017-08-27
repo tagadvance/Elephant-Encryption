@@ -38,18 +38,17 @@ class CertificateSigningRequest {
         $out = '';
         $isExported = openssl_csr_export($this->csr, $out, ! $includeHumanReadableInformation);
         if (! $isExported) {
-            throw new CryptographyException();
+            throw new CryptographyException('certificate signing request could not be exported');
         }
         return $out;
     }
 
-    function exportToFile(\SplFileInfo $file, $includeHumanReadableInformation = false): string {
-        $filePath = $file->getRealPath();
+    function exportToFile(\SplFileInfo $file, $includeHumanReadableInformation = false): void {
+        $filePath = $file->getPathname();
         $isExported = openssl_csr_export_to_file($this->csr, $filePath, ! $includeHumanReadableInformation);
         if (! $isExported) {
-            throw new CryptographyException();
+            throw new CryptographyException('certificate signing request could not be saved');
         }
-        return $out;
     }
 
 }

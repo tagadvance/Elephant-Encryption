@@ -45,13 +45,12 @@ class Certificate implements Closeable {
         return $output;
     }
 
-    function exportToFile(\SplFileInfo $file, $includeHumanReadableInformation = false): string {
-        $filePath = $file->getRealPath();
+    function exportToFile(\SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
+        $filePath = $file->getPathname();
         $isExported = openssl_x509_export_to_file($this->certificate, $filePath, ! $includeHumanReadableInformation);
         if (! $isExported) {
-            throw new CryptographyException();
+            throw new CryptographyException('certificate could not be saved');
         }
-        return $out;
     }
 
     function close() {

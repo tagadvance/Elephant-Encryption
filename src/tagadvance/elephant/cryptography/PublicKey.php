@@ -3,6 +3,8 @@
 namespace tagadvance\elephant\cryptography;
 
 use tagadvance\gilligan\io\File;
+use tagadvance\gilligan\io\FileOutputStream;
+use tagadvance\gilligan\io\IOException;
 
 class PublicKey {
 
@@ -18,12 +20,6 @@ class PublicKey {
         if (! $isExported) {
             throw new CryptographyException();
         }
-        return new self($key);
-    }
-
-    static function createFromFile(File $file) {
-        $path = $file->getRealPath();
-        $key = file_get_contents($path);
         return new self($key);
     }
 
