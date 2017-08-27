@@ -13,22 +13,31 @@ class Certificate implements Closeable {
      */
     private $certificate;
 
-    static function createFromFile(File $file): self {
+    /**
+     *
+     * @param File $file
+     * @throws CryptographyException
+     * @return self
+     */
+    static function createFromFile(\SplFileInfo $file): self {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $certificate = openssl_x509_read($filePath);
-        if ($certificate === false) {
-            throw new CryptographyException();
+        if (is_resource($certificate)) {
+            return new self($certificate);
         }
-        return new self($certificate);
+        throw new CryptographyException('could not read resource');
     }
 
+    /**
+     *
+     * @param resource $certificate
+     * @throws \InvalidArgumentException
+     */
     function __construct($certificate) {
         if (! is_resource($certificate)) {
-            $message = '$certificate must be a resource';
-            throw new \InvalidArgumentException($message);
+            throw new \InvalidArgumentException('$certificate must be a resource');
         }
-        
         $this->certificate = $certificate;
     }
 
@@ -36,15 +45,27 @@ class Certificate implements Closeable {
         return $this->certificate;
     }
 
+    /**
+     *
+     * @param string $includeHumanReadableInformation
+     * @throws CryptographyException
+     * @return string
+     */
     function export($includeHumanReadableInformation = false): string {
         $output = '';
         $isExported = openssl_x509_export($this->certificate, $output, ! $includeHumanReadableInformation);
-        if (! $isExported) {
-            throw new CryptographyException();
+        if ($isExported) {
+            return $output;
         }
-        return $output;
+        throw new CryptographyException();
     }
 
+    /**
+     *
+     * @param \SplFileInfo $file
+     * @param bool $includeHumanReadableInformation
+     * @throws CryptographyException
+     */
     function exportToFile(\SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
         $filePath = $file->getPathname();
         $isExported = openssl_x509_export_to_file($this->certificate, $filePath, ! $includeHumanReadableInformation);
