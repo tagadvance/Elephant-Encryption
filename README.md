@@ -5,6 +5,9 @@
 
 Elephant Encryption was originally a part of [Gilligan](https://github.com/tagadvance/Gilligan). Please bear in mind that while the encryption itself is very strong, data is only as secure as the server storing the private key.
 
+## Goal
+The goal was and is to create a well-structured, strongly-typed library to wrap around PHP's poorly documented OpenSSL extension.
+
 ## Download / Install
 The easiest way to install Elephant Encryption is via Composer:
 ```bash
