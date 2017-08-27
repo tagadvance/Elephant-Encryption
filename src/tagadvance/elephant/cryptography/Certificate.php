@@ -42,7 +42,7 @@ class Certificate implements Closeable {
     }
 
     /**
-     * 
+     *
      * @return resource
      */
     function getCertificate() {
@@ -78,7 +78,12 @@ class Certificate implements Closeable {
         }
     }
 
-    function close() {
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \tagadvance\gilligan\io\Closeable::close()
+     */
+    function close(): void {
         openssl_x509_free($this->certificate);
     }
 
