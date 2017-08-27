@@ -23,13 +23,13 @@ class PrivateKey implements Closeable {
         $configArgs = $builder->build();
         try {
             $key = openssl_pkey_new($configArgs);
-            if ($key === false) {
-                throw new CryptographyException('could not create private key');
+            if (is_resource($key)) {
+                return new self($key);
             }
         } catch (\Throwable $t) {
             throw new CryptographyException('could not create private key', $code = null, $t);
         }
-        return new self($key);
+        throw new CryptographyException('could not create private key');
     }
 
     /**
@@ -44,18 +44,13 @@ class PrivateKey implements Closeable {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $key = openssl_pkey_get_private($filePath, $password);
-        if ($key === false) {
-            throw new CryptographyException('key could not be read');
+        if (is_resource($key)) {
+            return new self($key);
         }
-        return new self($key);
+        throw new CryptographyException('key could not be read');
     }
 
     private function __construct($key) {
-        if (! is_resource($key)) {
-            $message = '$key must be a resource';
-            throw new \InvalidArgumentException($message);
-        }
-        
         $this->key = $key;
     }
 
@@ -102,10 +97,10 @@ class PrivateKey implements Closeable {
     function export(string $password = null, array $configuration = null): string {
         $output = '';
         $isExported = openssl_pkey_export($this->key, $output, $password, $configuration);
-        if (! $isExported) {
-            throw new CryptographyException('private key could not be exported');
+        if ($isExported) {
+            return $output;
         }
-        return $output;
+        throw new CryptographyException('private key could not be exported');
     }
 
     /**
