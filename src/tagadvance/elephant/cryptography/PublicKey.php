@@ -37,19 +37,6 @@ class PublicKey {
 
     /**
      *
-     * @throws CryptographyException
-     * @return array
-     */
-    function getDetails(): array {
-        $details = openssl_pkey_get_details($this->key);
-        if ($details === false) {
-            throw new CryptographyException('could not get details');
-        }
-        return $details;
-    }
-
-    /**
-     *
      * @return int
      */
     function calculateEncryptSize(): int {
