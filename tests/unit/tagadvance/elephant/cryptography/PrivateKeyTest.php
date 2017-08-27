@@ -3,18 +3,11 @@
 namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
-use tagadvance\gilligan\security\Hash;
 
 class PrivateKeyTest extends TestCase {
 
     function testNewPrivateKey() {
-        $configuration = ConfigurationBuilder::builder()
-                ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
-                ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
-                ->setX509Extensions('v3_ca')
-                ->setRequiredExtensions('v3_req')
-                ->setPrivateKeyBits(4096)
-                ->setPrivateKeyType();
+        $configuration = ConfigurationBuilder::builder();
         $privateKey = PrivateKey::newPrivateKey($configuration);
         $this->assertTrue(true);
     }
@@ -23,13 +16,10 @@ class PrivateKeyTest extends TestCase {
      * @expectedException tagadvance\elephant\cryptography\CryptographyException
      */
     function testNewPrivateKeyWithBogusConfigurationThrowsCryptographyException() {
-        $configuration = ConfigurationBuilder::builder()
-                ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
-                ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
-                ->setX509Extensions('foo')
-                ->setRequiredExtensions('foo')
-                ->setPrivateKeyBits(4096)
-                ->setPrivateKeyType();
+        $configuration = $this->getMockBuilder(ConfigurationBuilder::class)->getMock();
+        $configuration->method('build')->willReturn([
+                'private_key_bits' => 0
+        ]);
         $privateKey = PrivateKey::newPrivateKey($configuration);
         $this->assertTrue(true);
     }
