@@ -3,7 +3,7 @@
 
 # Elephant Encryption
 
-Elephant Encryption was originally a part of [https://github.com/tagadvance/Gilligan](Gilligan). Please bear in mind that while the encryption itself is very strong, data is only as secure as the server storing the private key.
+Elephant Encryption was originally a part of [Gilligan](https://github.com/tagadvance/Gilligan). Please bear in mind that while the encryption itself is very strong, data is only as secure as the server storing the private key.
 
 ## Download / Install
 The easiest way to install Elephant Encryption is via Composer:
