@@ -4,6 +4,14 @@ namespace tagadvance\elephant\cryptography;
 
 abstract class AbstractCryptographer implements Cryptographer {
 
+    /**
+     * 
+     * @param callable $function
+     * @param string $data
+     * @param int $size
+     * @throws CryptographyException
+     * @return string
+     */
     protected function doCrypt(callable $function, string $data, int $size) {
         $return = '';
         while ($data) {

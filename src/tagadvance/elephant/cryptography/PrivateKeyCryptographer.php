@@ -10,10 +10,19 @@ class PrivateKeyCryptographer extends AbstractCryptographer {
      */
     private $key;
 
+    /**
+     * 
+     * @param PrivateKey $key
+     */
     function __construct(PrivateKey $key) {
         $this->key = $key;
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \tagadvance\elephant\cryptography\Cryptographer::encrypt()
+     */
     function encrypt(string $data): string {
         $key = $this->key->getKey();
         $function = function ($input, &$output) use (&$key) {
@@ -23,6 +32,11 @@ class PrivateKeyCryptographer extends AbstractCryptographer {
         return $this->doCrypt($function, $data, $size);
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \tagadvance\elephant\cryptography\Cryptographer::decrypt()
+     */
     function decrypt(string $data): string {
         $key = $this->key->getKey();
         $function = function ($input, &$output) use (&$key) {

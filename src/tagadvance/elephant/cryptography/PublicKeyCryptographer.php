@@ -16,15 +16,29 @@ class PublicKeyCryptographer extends AbstractCryptographer {
      */
     private $publicKey;
 
+    /**
+     *
+     * @param PrivateKey $privateKey
+     * @param PublicKey $publicKey
+     */
     function __construct(PrivateKey $privateKey, PublicKey $publicKey) {
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
     }
 
+    /**
+     *
+     * @return string
+     */
     function getKey(): string {
         return $this->publicKey;
     }
 
+    /**
+     *
+     * {@inheritdoc}
+     * @see \tagadvance\elephant\cryptography\Cryptographer::encrypt()
+     */
     function encrypt(string $data): string {
         $key = $this->publicKey->getKey();
         $function = function ($input, &$output) use (&$key) {
@@ -34,6 +48,11 @@ class PublicKeyCryptographer extends AbstractCryptographer {
         return $this->doCrypt($function, $data, $size);
     }
 
+    /**
+     *
+     * {@inheritdoc}
+     * @see \tagadvance\elephant\cryptography\Cryptographer::decrypt()
+     */
     function decrypt(string $data): string {
         $key = $this->publicKey->getKey();
         $function = function ($input, &$output) use (&$key) {
