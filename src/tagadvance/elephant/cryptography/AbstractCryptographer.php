@@ -5,7 +5,7 @@ namespace tagadvance\elephant\cryptography;
 abstract class AbstractCryptographer implements Cryptographer {
 
     /**
-     * 
+     *
      * @param callable $function
      * @param string $data
      * @param int $size
