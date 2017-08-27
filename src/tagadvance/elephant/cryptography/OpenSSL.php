@@ -13,7 +13,10 @@ Extensions::getInstance()->requires('openssl');
  */
 class OpenSSL {
 
-    // bytes - 88 bits
+    /**
+     * 
+     * @var integer bytes - 88 bits
+     */
     const PADDING = 11;
 
     private function __construct() {}
@@ -23,7 +26,7 @@ class OpenSSL {
      *
      * @return void
      */
-    static function clearErrors() {
+    static function clearErrors(): void {
         while (openssl_error_string());
     }
 
@@ -32,7 +35,7 @@ class OpenSSL {
      *
      * @return void
      */
-    static function printErrors(PrintStream $out) {
+    static function printErrors(PrintStream $out): void {
         for ($i = 0; ($e = openssl_error_string()) !== false; $i ++) {
             if ($i == 0) {
                 $out->printLine('Errors:');

@@ -41,6 +41,10 @@ class Certificate implements Closeable {
         $this->certificate = $certificate;
     }
 
+    /**
+     * 
+     * @return resource
+     */
     function getCertificate() {
         return $this->certificate;
     }

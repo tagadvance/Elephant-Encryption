@@ -35,10 +35,17 @@ class ConfigurationBuilder {
 
     private $args;
 
-    static function builder() {
+    /**
+     * 
+     * @return self
+     */
+    static function builder(): self {
         return new self();
     }
 
+    /**
+     * 
+     */
     function __construct() {
         $this->args = [];
     }

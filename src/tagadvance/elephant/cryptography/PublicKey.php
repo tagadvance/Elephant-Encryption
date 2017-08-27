@@ -10,7 +10,13 @@ class PublicKey {
      */
     private $key;
 
-    static function createFromCertificate(Certificate $certificate) {
+    /**
+     * 
+     * @param Certificate $certificate
+     * @throws CryptographyException
+     * @return self
+     */
+    static function createFromCertificate(Certificate $certificate): self {
         $key = '';
         $isExported = openssl_x509_export($certificate->getCertificate(), $key);
         if ($isExported) {

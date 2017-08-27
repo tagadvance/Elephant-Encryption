@@ -50,10 +50,18 @@ class PrivateKey implements Closeable {
         throw new CryptographyException('key could not be read');
     }
 
+    /**
+     * 
+     * @param resource $key
+     */
     private function __construct($key) {
         $this->key = $key;
     }
 
+    /**
+     * 
+     * @return resource
+     */
     function getKey() {
         return $this->key;
     }
@@ -72,16 +80,29 @@ class PrivateKey implements Closeable {
         return $details;
     }
 
+    /**
+     * 
+     * @return int
+     */
     function calculateEncryptSize(): int {
         return $this->calculateDecryptSize() - OpenSSL::PADDING;
     }
 
+    /**
+     * 
+     * @return int
+     */
     function calculateDecryptSize(): int {
         $details = $this->getDetails();
         $bits = $details['bits'];
         return $bits / $bitsPerByte = 8;
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \tagadvance\gilligan\io\Closeable::close()
+     */
     function close(): void {
         openssl_pkey_free($this->key);
         unset($this->key);
