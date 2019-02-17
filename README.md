@@ -48,11 +48,9 @@ $configuration = ConfigurationBuilder::builder()
         ->setPrivateKeyType();
 $privateKey = PrivateKey::newPrivateKey($configuration);
 try {
-    {
-        $file = new File(KEY_PATH);
-        $privateKey->exportToFile($file, ELEPHANT_PASSWORD, $configuration->build());
-    }
-    
+    $file = new File(KEY_PATH);
+    $privateKey->exportToFile($file, ELEPHANT_PASSWORD, $configuration->build());
+
     $dn = DistinguishedNameBuilder::builder()
             ->setCountryName('US')
             ->setStateOrProvinceName('OR')
@@ -62,16 +60,12 @@ try {
             ->setCommonName('Wile E Coyote')
             ->setEmailAddress('w.coyote@acme.com');
     $csr = CertificateSigningRequest::newCertificateSigningRequest($dn, $privateKey);
-    {
-        $file = new File(CSR_PATH);
-        $csr->exportToFile($file, $human = false);
-    }
-    
+    $file = new File(CSR_PATH);
+    $csr->exportToFile($file, $human = false);
+
     $certificate = $csr->sign($privateKey);
-    {
-        $file = new File(CERTIFICATE_PATH);
-        $certificate->exportToFile($file);
-    }
+    $file = new File(CERTIFICATE_PATH);
+    $certificate->exportToFile($file);
     $certificate->close();
 } finally {
     $privateKey->close();
