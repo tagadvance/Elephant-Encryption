@@ -2,7 +2,7 @@ language: php
 
 php:
   - '7.1'
-  - nightly
+  - '7.2'
   
 before_install:
   # WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
