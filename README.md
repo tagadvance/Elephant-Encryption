@@ -80,33 +80,27 @@ try {
 
 ```bash
 $data = <<<DATA
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad 
-minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
-in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
 deserunt mollit anim id est laborum.
 DATA;
 
 $privateKey = PrivateKey::createFromFile(new File(KEY_PATH), ELEPHANT_PASSWORD);
+$certificate = Certificate::createFromFile(new File(CERTIFICATE_PATH));
 try {
-    $certificate = Certificate::createFromFile(new File(CERTIFICATE_PATH));
     $publicKey = PublicKey::createFromCertificate($certificate);
-    
-    try {
-        $privateKeyCryptographer = Base64Cryptographer::create(new PrivateKeyCryptographer($privateKey));
-        $publicKeyCryptographer = Base64Cryptographer::create(new PublicKeyCryptographer($privateKey, $publicKey));
-        
-        $encryptedData = $privateKeyCryptographer->encrypt($data);
-        Standard::output()->printLine($encryptedData);
-        $decryptedData = $publicKeyCryptographer->decrypt($encryptedData);
-        Standard::output()->printLine($decryptedData);
-        
-        $encryptedData = $publicKeyCryptographer->encrypt($data);
-        Standard::output()->printLine($encryptedData);
-        $decryptedData = $privateKeyCryptographer->decrypt($encryptedData);
-        Standard::output()->printLine($decryptedData);
-    } finally {
-        $certificate->close();
-    }
+    $publicKeyCryptographer = Base64Cryptographer::create(new PublicKeyCryptographer($privateKey, $publicKey));
+    $encryptedData = $publicKeyCryptographer->encrypt($data);
+    Standard::output()->printLine("Encrypted Data: $encryptedData");
+} finally {
+    $certificate->close();
+}
+
+try {
+    $privateKeyCryptographer = Base64Cryptographer::create(new PrivateKeyCryptographer($privateKey));
+    $decryptedData = $privateKeyCryptographer->decrypt($encryptedData);
+    Standard::output()->printLine("Decrypted Data: $decryptedData");
 } finally {
     $privateKey->close();
 }
