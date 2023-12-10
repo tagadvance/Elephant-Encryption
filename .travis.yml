@@ -1,8 +1,7 @@
 language: php
 
 php:
-  - '7.1'
-  - '7.2'
+  - '8.1'
   
 before_install:
   # WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
@@ -20,11 +19,5 @@ before_script:
   # configure time zone
   - echo 'date.timezone = "America/Los_Angeles"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
-  # php-coveralls
-  - mkdir -p build/logs
-
 script:
-  - php --define apc.enable_cli=1 vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-clover build/logs/clover.xml tests
-
-after_success:
-  - travis_retry php vendor/bin/coveralls -v
+  - php --define apc.enable_cli=1 vendor/bin/phpunit --bootstrap vendor/autoload.php tests

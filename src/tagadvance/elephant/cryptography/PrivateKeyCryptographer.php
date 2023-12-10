@@ -8,7 +8,7 @@ class PrivateKeyCryptographer extends AbstractCryptographer {
      *
      * @var PrivateKey
      */
-    private $key;
+    private PrivateKey $key;
 
     /**
      * 
@@ -21,12 +21,12 @@ class PrivateKeyCryptographer extends AbstractCryptographer {
     /**
      * 
      * {@inheritDoc}
-     * @see \tagadvance\elephant\cryptography\Cryptographer::encrypt()
+     * @see Cryptographer::encrypt
      */
     function encrypt(string $data): string {
         $key = $this->key->getKey();
         $function = function ($input, &$output) use (&$key) {
-            return openssl_private_encrypt($input, $output, $key, OPENSSL_PKCS1_PADDING);
+            return openssl_private_encrypt($input, $output, $key);
         };
         $size = $this->key->calculateEncryptSize();
         return $this->doCrypt($function, $data, $size);
@@ -35,7 +35,7 @@ class PrivateKeyCryptographer extends AbstractCryptographer {
     /**
      * 
      * {@inheritDoc}
-     * @see \tagadvance\elephant\cryptography\Cryptographer::decrypt()
+     * @see Cryptographer::decrypt
      */
     function decrypt(string $data): string {
         $key = $this->key->getKey();

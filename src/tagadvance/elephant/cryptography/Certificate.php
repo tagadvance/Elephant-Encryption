@@ -2,10 +2,12 @@
 
 namespace tagadvance\elephant\cryptography;
 
+use InvalidArgumentException;
+use OpenSSLCertificate;
+use SplFileInfo;
 use tagadvance\gilligan\io\File;
-use tagadvance\gilligan\io\Closeable;
 
-class Certificate implements Closeable {
+class Certificate {
 
     /**
      *
@@ -19,11 +21,11 @@ class Certificate implements Closeable {
      * @throws CryptographyException
      * @return self
      */
-    static function createFromFile(\SplFileInfo $file): self {
+    static function createFromFile(SplFileInfo $file): self {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $certificate = openssl_x509_read($filePath);
-        if (is_resource($certificate)) {
+        if ($certificate !== false) {
             return new self($certificate);
         }
         throw new CryptographyException('could not read resource');
@@ -31,13 +33,10 @@ class Certificate implements Closeable {
 
     /**
      *
-     * @param resource $certificate
-     * @throws \InvalidArgumentException
+     * @param OpenSSLCertificate $certificate
+     * @throws InvalidArgumentException
      */
-    function __construct($certificate) {
-        if (! is_resource($certificate)) {
-            throw new \InvalidArgumentException('$certificate must be a resource');
-        }
+    function __construct(OpenSSLCertificate $certificate) {
         $this->certificate = $certificate;
     }
 
@@ -51,11 +50,11 @@ class Certificate implements Closeable {
 
     /**
      *
-     * @param string $includeHumanReadableInformation
+     * @param bool $includeHumanReadableInformation
      * @throws CryptographyException
      * @return string
      */
-    function export($includeHumanReadableInformation = false): string {
+    function export(bool $includeHumanReadableInformation = false): string {
         $output = '';
         $isExported = openssl_x509_export($this->certificate, $output, ! $includeHumanReadableInformation);
         if ($isExported) {
@@ -66,25 +65,16 @@ class Certificate implements Closeable {
 
     /**
      *
-     * @param \SplFileInfo $file
+     * @param SplFileInfo $file
      * @param bool $includeHumanReadableInformation
      * @throws CryptographyException
      */
-    function exportToFile(\SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
+    function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
         $filePath = $file->getPathname();
         $isExported = openssl_x509_export_to_file($this->certificate, $filePath, ! $includeHumanReadableInformation);
         if (! $isExported) {
             throw new CryptographyException('certificate could not be saved');
         }
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * @see \tagadvance\gilligan\io\Closeable::close()
-     */
-    function close(): void {
-        openssl_x509_free($this->certificate);
     }
 
 }

@@ -2,10 +2,7 @@
 
 namespace tagadvance\elephant\cryptography;
 
-use tagadvance\gilligan\base\Extensions;
 use tagadvance\gilligan\io\PrintStream;
-
-Extensions::getInstance()->requires('openssl');
 
 /**
  *
@@ -33,6 +30,7 @@ class OpenSSL {
     /**
      * Prints all errors in the OpenSSL internal error cache.
      *
+     * @param PrintStream $out
      * @return void
      */
     static function printErrors(PrintStream $out): void {

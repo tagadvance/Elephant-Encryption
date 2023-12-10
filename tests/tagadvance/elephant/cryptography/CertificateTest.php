@@ -3,41 +3,33 @@
 namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
+use SplFileInfo;
+use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
 
 class CertificateTest extends TestCase {
 
     /**
      *
-     * @var PrivateKey
-     */
-    private $privateKey;
-
-    /**
-     *
      * @var Certificate
      */
-    private $certificate;
+    private Certificate $certificate;
 
-    function setUp() {
-        $builder = $this->getMockBuilder(ArrayBuilder::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $builder->method('build')->willReturn([]);
+    function setUp(): void {
+        $builder = new ArrayBuilder([]);
         
-        $path = __DIR__ . '/../../../../resources/elephant.key';
-        $file = new \SplFileInfo($path);
-        $this->privateKey = PrivateKey::createFromFile($file);
+        $path = __DIR__ . '/../../../resources/elephant.key';
+        $file = new SplFileInfo($path);
+        $privateKey = PrivateKey::createFromFile($file);
         
-        $csr = CertificateSigningRequest::newCertificateSigningRequest($builder, $this->privateKey);
-        $this->certificate = $csr->sign($this->privateKey);
+        $csr = CertificateSigningRequest::newCertificateSigningRequest($builder, $privateKey);
+        $this->certificate = $csr->sign($privateKey);
     }
 
     function testCreateFromFile() {
-        $path = __DIR__ . '/../../../../resources/elephant.cert';
-        $file = new \SplFileInfo($path);
+        $path = __DIR__ . '/../../../resources/elephant.cert';
+        $file = new SplFileInfo($path);
         $certificate = Certificate::createFromFile($file);
         $this->assertTrue(true);
-        $certificate->close();
     }
 
     function testExport() {
@@ -54,7 +46,7 @@ class CertificateTest extends TestCase {
 
     function testExportToFile() {
         $path = '/tmp/elephant.csr';
-        $file = new \SplFileInfo($path);
+        $file = new SplFileInfo($path);
         $this->certificate->exportToFile($file);
         
         $export = file_get_contents($path);
@@ -64,17 +56,12 @@ class CertificateTest extends TestCase {
 
     function testExportToFileHumanReadable() {
         $path = '/tmp/elephant-human-readable.csr';
-        $file = new \SplFileInfo($path);
+        $file = new SplFileInfo($path);
         $this->certificate->exportToFile($file, true);
         
         $export = file_get_contents($path);
         $this->assertStringStartsWith($prefix = 'Certificate:', $export);
         $this->assertStringEndsWith($prefix = '-----END CERTIFICATE-----', trim($export));
-    }
-
-    function tearDown() {
-        $this->certificate->close();
-        $this->privateKey->close();
     }
 
 }

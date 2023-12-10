@@ -55,5 +55,5 @@ local.properties
 # Composer 
 /vendor/
 
-# php-coveralls
-build/
+# PHPUnit
+.phpunit.*

@@ -2,6 +2,11 @@
 
 namespace tagadvance\elephant\cryptography;
 
+use OpenSSLCertificateSigningRequest;
+use SplFileInfo;
+use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
+use Throwable;
+
 class CertificateSigningRequest {
 
     /**
@@ -21,7 +26,7 @@ class CertificateSigningRequest {
         $dn = $builder->build();
         $key = $privateKey->getKey();
         $csr = openssl_csr_new($dn, $key);
-        if (is_resource($csr)) {
+        if ($csr !== false) {
             return new self($csr);
         }
         throw new CryptographyException('could not create certificate signing request');
@@ -29,9 +34,9 @@ class CertificateSigningRequest {
 
     /**
      *
-     * @param resource $csr
+     * @param OpenSSLCertificateSigningRequest $csr
      */
-    private function __construct($csr) {
+    private function __construct(OpenSSLCertificateSigningRequest $csr) {
         $this->csr = $csr;
     }
 
@@ -45,10 +50,10 @@ class CertificateSigningRequest {
     function sign(PrivateKey $privateKey, int $days = 365): Certificate {
         try {
             $certificate = openssl_csr_sign($this->csr, $cacert = null, $privateKey->getKey(), $days);
-            if (is_resource($certificate)) {
+            if ($certificate !== false) {
                 return new Certificate($certificate);
             }
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             throw new CryptographyException('could not sign certificate signing request', $code = null, $t);
         }
         throw new CryptographyException('could not sign certificate signing request');
@@ -56,11 +61,11 @@ class CertificateSigningRequest {
 
     /**
      *
-     * @param string $includeHumanReadableInformation
+     * @param bool $includeHumanReadableInformation
      * @throws CryptographyException
      * @return string
      */
-    function export($includeHumanReadableInformation = false): string {
+    function export(bool $includeHumanReadableInformation = false): string {
         $out = '';
         $isExported = openssl_csr_export($this->csr, $out, ! $includeHumanReadableInformation);
         if (! $isExported) {
@@ -71,11 +76,11 @@ class CertificateSigningRequest {
 
     /**
      *
-     * @param \SplFileInfo $file
-     * @param string $includeHumanReadableInformation
+     * @param SplFileInfo $file
+     * @param bool $includeHumanReadableInformation
      * @throws CryptographyException
      */
-    function exportToFile(\SplFileInfo $file, $includeHumanReadableInformation = false): void {
+    function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
         $filePath = $file->getPathname();
         $isExported = openssl_csr_export_to_file($this->csr, $filePath, ! $includeHumanReadableInformation);
         if (! $isExported) {

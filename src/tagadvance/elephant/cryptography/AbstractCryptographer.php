@@ -12,7 +12,7 @@ abstract class AbstractCryptographer implements Cryptographer {
      * @throws CryptographyException
      * @return string
      */
-    protected function doCrypt(callable $function, string $data, int $size) {
+    protected function doCrypt(callable $function, string $data, int $size): string {
         $return = '';
         while ($data) {
             $input = substr($data, $start = 0, $size);

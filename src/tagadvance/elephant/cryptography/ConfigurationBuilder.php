@@ -33,7 +33,7 @@ class ConfigurationBuilder {
 
     private const MINIMUM_RECOMMENDED_KEY_SIZE = 2048;
 
-    private $args;
+    private array $args;
 
     /**
      * 

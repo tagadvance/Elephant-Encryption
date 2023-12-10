@@ -2,9 +2,11 @@
 
 namespace tagadvance\elephant\cryptography;
 
-use tagadvance\gilligan\io\Closeable;
+use OpenSSLAsymmetricKey;
+use SplFileInfo;
+use Throwable;
 
-class PrivateKey implements Closeable {
+class PrivateKey {
 
     /**
      *
@@ -23,28 +25,28 @@ class PrivateKey implements Closeable {
         $configArgs = $builder->build();
         try {
             $key = openssl_pkey_new($configArgs);
-            if (is_resource($key)) {
+            if ($key !== false) {
                 return new self($key);
             }
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             throw new CryptographyException('could not create private key', $code = null, $t);
         }
+
         throw new CryptographyException('could not create private key');
     }
 
     /**
      *
-     * @param \SplFileInfo $file
-     * @param string $password
-     * @throws CryptographyException
+     * @param SplFileInfo $file
+     * @param string|null $password
      * @return self
      * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
      */
-    static function createFromFile(\SplFileInfo $file, string $password = null): self {
+    static function createFromFile(SplFileInfo $file, string $password = null): self {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $key = openssl_pkey_get_private($filePath, $password);
-        if (is_resource($key)) {
+        if ($key !== false) {
             return new self($key);
         }
         throw new CryptographyException('key could not be read');
@@ -52,9 +54,9 @@ class PrivateKey implements Closeable {
 
     /**
      * 
-     * @param resource $key
+     * @param OpenSSLAsymmetricKey $key
      */
-    private function __construct($key) {
+    private function __construct(OpenSSLAsymmetricKey $key) {
         $this->key = $key;
     }
 
@@ -99,20 +101,9 @@ class PrivateKey implements Closeable {
     }
 
     /**
-     * 
-     * {@inheritDoc}
-     * @see \tagadvance\gilligan\io\Closeable::close()
-     */
-    function close(): void {
-        openssl_pkey_free($this->key);
-        unset($this->key);
-    }
-
-    /**
      *
-     * @param string $password
-     * @param array $configuration
-     * @throws CryptographyException
+     * @param string|null $password
+     * @param array|null $configuration
      * @return string
      */
     function export(string $password = null, array $configuration = null): string {
@@ -126,13 +117,12 @@ class PrivateKey implements Closeable {
 
     /**
      *
-     * @param \SplFileInfo $file
-     * @param string $password
-     * @param array $configuration
-     * @throws CryptographyException
+     * @param SplFileInfo $file
+     * @param string|null $password
+     * @param array|null $configuration
      * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
      */
-    function exportToFile(\SplFileInfo $file, string $password = null, array $configuration = null): void {
+    function exportToFile(SplFileInfo $file, string $password = null, array $configuration = null): void {
         $path = $file->getPathname();
         $result = openssl_pkey_export_to_file($this->key, $path, $password, $configuration);
         if (! $result) {

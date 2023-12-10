@@ -2,6 +2,8 @@
 
 namespace tagadvance\elephant\cryptography;
 
-class CryptographyException extends \RuntimeException {
+use RuntimeException;
+
+class CryptographyException extends RuntimeException {
 
 }

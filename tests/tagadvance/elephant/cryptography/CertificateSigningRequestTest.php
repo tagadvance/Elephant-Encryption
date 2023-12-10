@@ -3,21 +3,20 @@
 namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
+use SplFileInfo;
+use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
 
 class CertificateSigningRequestTest extends TestCase {
 
-    private $privateKey;
+    private PrivateKey $privateKey;
 
-    private $csr;
+    private CertificateSigningRequest $csr;
 
-    function setUp() {
-        $builder = $this->getMockBuilder(ArrayBuilder::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $builder->method('build')->willReturn([]);
+    function setUp(): void {
+        $builder = new ArrayBuilder([]);
         
-        $path = __DIR__ . '/../../../../resources/elephant.key';
-        $file = new \SplFileInfo($path);
+        $path = __DIR__ . '/../../../resources/elephant.key';
+        $file = new SplFileInfo($path);
         $this->privateKey = PrivateKey::createFromFile($file);
         
         $this->csr = CertificateSigningRequest::newCertificateSigningRequest($builder, $this->privateKey);
@@ -33,10 +32,9 @@ class CertificateSigningRequestTest extends TestCase {
         $this->assertTrue(true);
     }
 
-    /**
-     * @expectedException tagadvance\elephant\cryptography\CryptographyException
-     */
     function testSignWithBogusPrivateKey() {
+        $this->expectException(CryptographyException::class);
+
         $key = $this->getMockBuilder(PrivateKey::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,7 +62,7 @@ class CertificateSigningRequestTest extends TestCase {
 
     function testExportToFile() {
         $path = '/tmp/elephant.csr';
-        $file = new \SplFileInfo($path);
+        $file = new SplFileInfo($path);
         $this->csr->exportToFile($file);
         
         $export = file_get_contents($path);
@@ -74,16 +72,12 @@ class CertificateSigningRequestTest extends TestCase {
 
     function testExportToFileHumanReadable() {
         $path = '/tmp/elephant-human-readable.csr';
-        $file = new \SplFileInfo($path);
+        $file = new SplFileInfo($path);
         $this->csr->exportToFile($file);
         
         $export = file_get_contents($path);
         $this->assertStringStartsWith($prefix = '-----BEGIN CERTIFICATE REQUEST-----', $export);
         $this->assertStringEndsWith($prefix = '-----END CERTIFICATE REQUEST-----', trim($export));
-    }
-
-    function tearDown() {
-        $this->privateKey->close();
     }
 
 }

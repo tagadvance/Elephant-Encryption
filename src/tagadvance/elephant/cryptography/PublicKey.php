@@ -8,7 +8,7 @@ class PublicKey {
      *
      * @var string
      */
-    private $key;
+    private string $key;
 
     /**
      * 

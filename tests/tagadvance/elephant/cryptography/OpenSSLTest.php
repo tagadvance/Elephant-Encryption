@@ -17,12 +17,7 @@ class OpenSSLTest extends TestCase {
         $this->assertTrue(true);
     }
 
-    /**
-     * Prints all errors in the OpenSSL internal error cache.
-     *
-     * @return void
-     */
-    static function printErrors(PrintStream $out): void {
+    function testPrintErrors(): void {
         $mos = new MemoryOutputStream();
         $out = new PrintStream($mos);
         OpenSSL::printErrors($out);

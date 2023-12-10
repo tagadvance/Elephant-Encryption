@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/tagadvance/Elephant-Encryption.svg?branch=master)](https://travis-ci.org/tagadvance/Elephant-Encryption)
-[![Coverage Status](https://coveralls.io/repos/github/tagadvance/Elephant-Encryption/badge.svg?branch=master)](https://coveralls.io/github/tagadvance/Elephant-Encryption?branch=master)
 
 # Elephant Encryption
 
@@ -27,7 +26,7 @@ composer require "tagadvance/elephant:dev-master"
 
 use tagadvance\elephant\cryptography\CertificateSigningRequest;
 use tagadvance\elephant\cryptography\ConfigurationBuilder;
-use tagadvance\elephant\cryptography\DistinguishedNameBuilder;
+use tagadvance\elephant\cryptography\distinguishedname\DistinguishedNameBuilder;
 use tagadvance\elephant\cryptography\PrivateKey;
 use tagadvance\gilligan\io\File;
 use tagadvance\gilligan\security\Hash;
@@ -40,36 +39,31 @@ define('CERTIFICATE_PATH', '/tmp/elephant.cert');
 define('ELEPHANT_PASSWORD', null);
 
 $configuration = ConfigurationBuilder::builder()
-        ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
-        ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
-        ->setX509Extensions('v3_ca')
-        ->setRequiredExtensions('v3_req')
-        ->setPrivateKeyBits(4096)
-        ->setPrivateKeyType();
+    ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
+    ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
+    ->setX509Extensions('v3_ca')
+    ->setRequiredExtensions('v3_req')
+    ->setPrivateKeyBits(4096)
+    ->setPrivateKeyType();
 $privateKey = PrivateKey::newPrivateKey($configuration);
-try {
-    $file = new File(KEY_PATH);
-    $privateKey->exportToFile($file, ELEPHANT_PASSWORD, $configuration->build());
+$file = new File(KEY_PATH);
+$privateKey->exportToFile($file, ELEPHANT_PASSWORD, $configuration->build());
 
-    $dn = DistinguishedNameBuilder::builder()
-            ->setCountryName('US')
-            ->setStateOrProvinceName('OR')
-            ->setLocality('Crater Lake')
-            ->setOrganizationName('Acme Corporation')
-            ->setOrganizationUnitName('.')
-            ->setCommonName('Wile E Coyote')
-            ->setEmailAddress('w.coyote@acme.com');
-    $csr = CertificateSigningRequest::newCertificateSigningRequest($dn, $privateKey);
-    $file = new File(CSR_PATH);
-    $csr->exportToFile($file, $human = false);
+$dn = DistinguishedNameBuilder::builder()
+    ->setCountryName('US')
+    ->setStateOrProvinceName('OR')
+    ->setLocality('Crater Lake')
+    ->setOrganizationName('Acme Corporation')
+    ->setOrganizationUnitName('.')
+    ->setCommonName('Wile E Coyote')
+    ->setEmailAddress('w.coyote@acme.com');
+$csr = CertificateSigningRequest::newCertificateSigningRequest($dn, $privateKey);
+$file = new File(CSR_PATH);
+$csr->exportToFile($file, $human = false);
 
-    $certificate = $csr->sign($privateKey);
-    $file = new File(CERTIFICATE_PATH);
-    $certificate->exportToFile($file);
-    $certificate->close();
-} finally {
-    $privateKey->close();
-}
+$certificate = $csr->sign($privateKey);
+$file = new File(CERTIFICATE_PATH);
+$certificate->exportToFile($file);
 ```
 
 ```bash
@@ -82,20 +76,13 @@ DATA;
 
 $privateKey = PrivateKey::createFromFile(new File(KEY_PATH), ELEPHANT_PASSWORD);
 $certificate = Certificate::createFromFile(new File(CERTIFICATE_PATH));
-try {
-    $publicKey = PublicKey::createFromCertificate($certificate);
-    $publicKeyCryptographer = Base64Cryptographer::create(new PublicKeyCryptographer($privateKey, $publicKey));
-    $encryptedData = $publicKeyCryptographer->encrypt($data);
-    Standard::output()->printLine("Encrypted Data: $encryptedData");
-} finally {
-    $certificate->close();
-}
+$publicKey = PublicKey::createFromCertificate($certificate);
 
-try {
-    $privateKeyCryptographer = Base64Cryptographer::create(new PrivateKeyCryptographer($privateKey));
-    $decryptedData = $privateKeyCryptographer->decrypt($encryptedData);
-    Standard::output()->printLine("Decrypted Data: $decryptedData");
-} finally {
-    $privateKey->close();
-}
+$publicKeyCryptographer = Base64Cryptographer::create(new PublicKeyCryptographer($privateKey, $publicKey));
+$encryptedData = $publicKeyCryptographer->encrypt($data);
+Standard::output()->printLine("Encrypted Data: $encryptedData");
+
+$privateKeyCryptographer = Base64Cryptographer::create(new PrivateKeyCryptographer($privateKey));
+$decryptedData = $privateKeyCryptographer->decrypt($encryptedData);
+Standard::output()->printLine("Decrypted Data: $decryptedData");
 ```

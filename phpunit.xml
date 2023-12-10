@@ -1,14 +1,15 @@
-<phpunit bootstrap="./bootstrap.php" colors="false">
-	<testsuite name="ElephantEncryptionTests">
-		<directory>./</directory>
-	</testsuite>
-
-	<filter>
-		<whitelist>
-			<directory suffix=".php">./src</directory>
-			<exclude>
-				<directory suffix=".php">./tests</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./bootstrap.php" colors="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache">
+  <coverage/>
+  <testsuite name="ElephantEncryptionTests">
+    <directory>./</directory>
+  </testsuite>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./tests</directory>
+    </exclude>
+  </source>
 </phpunit>

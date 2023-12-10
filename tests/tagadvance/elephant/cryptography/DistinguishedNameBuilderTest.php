@@ -3,6 +3,7 @@
 namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
+use tagadvance\elephant\cryptography\distinguishedname\DistinguishedNameBuilder;
 
 class DistinguishedNameBuilderTest extends TestCase {
 

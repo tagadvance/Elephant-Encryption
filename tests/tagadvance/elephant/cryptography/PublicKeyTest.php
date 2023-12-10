@@ -3,17 +3,16 @@
 namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
+use SplFileInfo;
+use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
 
 class PublicKeyTest extends TestCase {
 
     function testCreateFromCertificate() {
-        $builder = $this->getMockBuilder(ArrayBuilder::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $builder->method('build')->willReturn([]);
+        $builder = new ArrayBuilder([]);
         
-        $path = __DIR__ . '/../../../../resources/elephant.key';
-        $file = new \SplFileInfo($path);
+        $path = __DIR__ . '/../../../resources/elephant.key';
+        $file = new SplFileInfo($path);
         $privateKey = PrivateKey::createFromFile($file);
         
         $csr = CertificateSigningRequest::newCertificateSigningRequest($builder, $privateKey);
@@ -21,9 +20,6 @@ class PublicKeyTest extends TestCase {
         
         $publicKey = PublicKey::createFromCertificate($certificate);
         $this->assertTrue(true);
-        
-        $certificate->close();
-        $privateKey->close();
     }
 
     function testCalculateEncryptSize() {
