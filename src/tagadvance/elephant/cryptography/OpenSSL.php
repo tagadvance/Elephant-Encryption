@@ -5,12 +5,14 @@ namespace tagadvance\elephant\cryptography;
 use Throwable;
 
 /**
+ * Padding sizes and the wrapper every openssl_* call in this library goes through.
  *
  * @author Tag <tagadvance+elephant@gmail.com>
  */
 class OpenSSL
 {
     /**
+     * Overhead of PKCS #1 v1.5 padding, used by the private-key signature path.
      *
      * @var integer bytes - 88 bits
      */
@@ -38,10 +40,10 @@ class OpenSSL
      * only as a PHP warning and leaves the error queue empty, so the warning is the only
      * diagnostic that exists for that failure.
      *
-     * @param callable $function
-     * @param string $message
-     * @throws CryptographyException
-     * @return mixed The return value of $function, which is never false.
+     * @param callable $function takes no arguments; capture any out-parameter by reference
+     * @param string $message prefixed to the openssl detail in the exception message
+     * @throws CryptographyException if $function returns false or throws
+     * @return mixed whatever $function returned, which is never false
      */
     public static function call(callable $function, string $message): mixed
     {
@@ -69,9 +71,8 @@ class OpenSSL
     }
 
     /**
-     * Removes all errors in the OpenSSL internal error cache.
-     *
-     * @return void
+     * Empties the openssl error queue so that anything drained afterwards belongs to the
+     * call we are about to make, not to some earlier consumer's failure.
      */
     private static function clearErrors(): void
     {

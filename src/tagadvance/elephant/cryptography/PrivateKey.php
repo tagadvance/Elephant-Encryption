@@ -5,16 +5,18 @@ namespace tagadvance\elephant\cryptography;
 use OpenSSLAsymmetricKey;
 use SplFileInfo;
 
+/**
+ * An RSA private key. The matching public key is reachable via getDetails()['key'].
+ */
 class PrivateKey
 {
     private OpenSSLAsymmetricKey $key;
 
     /**
+     * Generates a new key.
      *
-     * @param ConfigurationBuilder $builder
-     * @throws CryptographyException
-     * @return self
-     * @see http://php.net/manual/en/function.openssl-pkey-new.php
+     * @throws CryptographyException if the configuration is rejected, e.g. too few key bits
+     * @see https://www.php.net/manual/en/function.openssl-pkey-new.php
      */
     public static function newPrivateKey(ConfigurationBuilder $builder): self
     {
@@ -28,11 +30,9 @@ class PrivateKey
     }
 
     /**
-     *
-     * @param SplFileInfo $file
-     * @param string|null $password
-     * @return self
-     * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
+     * @param string|null $password required only if the key on disk is encrypted
+     * @throws CryptographyException if the key cannot be read or the password is wrong
+     * @see https://www.php.net/manual/en/function.openssl-pkey-get-private.php
      */
     public static function createFromFile(SplFileInfo $file, ?string $password = null): self
     {
@@ -46,10 +46,6 @@ class PrivateKey
         return new self($key);
     }
 
-    /**
-     *
-     * @param OpenSSLAsymmetricKey $key
-     */
     private function __construct(OpenSSLAsymmetricKey $key)
     {
         $this->key = $key;
@@ -61,10 +57,9 @@ class PrivateKey
     }
 
     /**
-     *
-     * @throws CryptographyException
-     * @return array
-     * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+     * @return array the key's details; ['key'] is the matching public key in PEM form
+     * @throws CryptographyException if the details cannot be read
+     * @see https://www.php.net/manual/en/function.openssl-pkey-get-details.php
      */
     public function getDetails(): array
     {
@@ -75,8 +70,10 @@ class PrivateKey
     }
 
     /**
+     * The largest plaintext a single private-key encrypt can take.
      *
-     * @return int
+     * Private-key encryption is a PKCS #1 v1.5 signature operation, so the overhead is the
+     * smaller PADDING. PublicKey::calculateEncryptSize() subtracts OAEP_PADDING instead.
      */
     public function calculateEncryptSize(): int
     {
@@ -84,8 +81,7 @@ class PrivateKey
     }
 
     /**
-     *
-     * @return int
+     * The size of one ciphertext block, which is the modulus rounded up to whole bytes.
      */
     public function calculateDecryptSize(): int
     {
@@ -96,10 +92,9 @@ class PrivateKey
     }
 
     /**
-     *
-     * @param string|null $password
-     * @param array|null $configuration
-     * @return string
+     * @param string|null $password encrypts the exported key; omit for an unencrypted PEM
+     * @param array|null $configuration openssl config, as built by ConfigurationBuilder
+     * @throws CryptographyException if the key cannot be exported
      */
     public function export(?string $password = null, ?array $configuration = null): string
     {
@@ -115,11 +110,10 @@ class PrivateKey
     }
 
     /**
-     *
-     * @param SplFileInfo $file
-     * @param string|null $password
-     * @param array|null $configuration
-     * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
+     * @param string|null $password encrypts the exported key; omit for an unencrypted PEM
+     * @param array|null $configuration openssl config, as built by ConfigurationBuilder
+     * @throws CryptographyException if the file cannot be written
+     * @see https://www.php.net/manual/en/function.openssl-pkey-export-to-file.php
      */
     public function exportToFile(SplFileInfo $file, ?string $password = null, ?array $configuration = null): void
     {

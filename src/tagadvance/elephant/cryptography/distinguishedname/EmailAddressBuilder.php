@@ -12,10 +12,7 @@ class EmailAddressBuilder
     }
 
     /**
-     *
-     * @param string $address
-     *            e.g. 'goku@intentionallyblankpage.com'
-     * @return ArrayBuilder
+     * @param string $address e.g. 'goku@intentionallyblankpage.com'
      */
     public function setEmailAddress(string $address): ArrayBuilder
     {

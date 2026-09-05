@@ -12,10 +12,7 @@ class StateOrProvinceBuilder
     }
 
     /**
-     *
-     * @param string $name
-     *            e.g. 'Oregon'
-     * @return LocalityBuilder
+     * @param string $name e.g. 'Oregon'
      */
     public function setStateOrProvinceName(string $name): LocalityBuilder
     {

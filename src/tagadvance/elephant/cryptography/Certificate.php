@@ -6,15 +6,15 @@ use InvalidArgumentException;
 use OpenSSLCertificate;
 use SplFileInfo;
 
+/**
+ * A parsed X.509 certificate.
+ */
 class Certificate
 {
     private OpenSSLCertificate $certificate;
 
     /**
-     *
-     * @param SplFileInfo $file
-     * @throws CryptographyException
-     * @return self
+     * @throws CryptographyException if the file cannot be read as a certificate
      */
     public static function createFromFile(SplFileInfo $file): self
     {
@@ -28,11 +28,6 @@ class Certificate
         return new self($certificate);
     }
 
-    /**
-     *
-     * @param OpenSSLCertificate $certificate
-     * @throws InvalidArgumentException
-     */
     public function __construct(OpenSSLCertificate $certificate)
     {
         $this->certificate = $certificate;
@@ -44,10 +39,8 @@ class Certificate
     }
 
     /**
-     *
-     * @param bool $includeHumanReadableInformation
-     * @throws CryptographyException
-     * @return string
+     * @param bool $includeHumanReadableInformation prepend the certificate's fields in plain text
+     * @throws CryptographyException if the certificate cannot be exported
      */
     public function export(bool $includeHumanReadableInformation = false): string
     {
@@ -63,10 +56,8 @@ class Certificate
     }
 
     /**
-     *
-     * @param SplFileInfo $file
-     * @param bool $includeHumanReadableInformation
-     * @throws CryptographyException
+     * @param bool $includeHumanReadableInformation prepend the certificate's fields in plain text
+     * @throws CryptographyException if the file cannot be written
      */
     public function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void
     {

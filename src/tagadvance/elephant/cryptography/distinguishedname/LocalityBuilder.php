@@ -12,10 +12,7 @@ class LocalityBuilder
     }
 
     /**
-     *
-     * @param string $locality
-     *            e.g. 'Medford'
-     * @return OrganizationBuilder
+     * @param string $locality e.g. 'Medford'
      */
     public function setLocality(string $locality): OrganizationBuilder
     {

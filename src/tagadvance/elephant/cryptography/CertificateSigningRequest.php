@@ -6,16 +6,16 @@ use OpenSSLCertificateSigningRequest;
 use SplFileInfo;
 use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
 
+/**
+ * A certificate signing request, which sign() turns into a certificate.
+ */
 class CertificateSigningRequest
 {
     private OpenSSLCertificateSigningRequest $csr;
 
     /**
-     *
-     * @param ArrayBuilder $builder
-     * @param PrivateKey $privateKey
-     * @throws CryptographyException
-     * @return self
+     * @param ArrayBuilder $builder the distinguished name, from DistinguishedNameBuilder
+     * @throws CryptographyException if the request cannot be created
      */
     public static function newCertificateSigningRequest(ArrayBuilder $builder, PrivateKey $privateKey): self
     {
@@ -29,21 +29,16 @@ class CertificateSigningRequest
         return new self($csr);
     }
 
-    /**
-     *
-     * @param OpenSSLCertificateSigningRequest $csr
-     */
     private function __construct(OpenSSLCertificateSigningRequest $csr)
     {
         $this->csr = $csr;
     }
 
     /**
+     * Self-signs this request, since no CA certificate is passed.
      *
-     * @param PrivateKey $privateKey
-     * @param int $days
-     * @throws CryptographyException
-     * @return Certificate
+     * @param int $days how long the certificate stays valid
+     * @throws CryptographyException if signing fails
      */
     public function sign(PrivateKey $privateKey, int $days = 365): Certificate
     {
@@ -56,10 +51,8 @@ class CertificateSigningRequest
     }
 
     /**
-     *
-     * @param bool $includeHumanReadableInformation
-     * @throws CryptographyException
-     * @return string
+     * @param bool $includeHumanReadableInformation prepend the request's fields in plain text
+     * @throws CryptographyException if the request cannot be exported
      */
     public function export(bool $includeHumanReadableInformation = false): string
     {
@@ -75,10 +68,8 @@ class CertificateSigningRequest
     }
 
     /**
-     *
-     * @param SplFileInfo $file
-     * @param bool $includeHumanReadableInformation
-     * @throws CryptographyException
+     * @param bool $includeHumanReadableInformation prepend the request's fields in plain text
+     * @throws CryptographyException if the file cannot be written
      */
     public function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void
     {

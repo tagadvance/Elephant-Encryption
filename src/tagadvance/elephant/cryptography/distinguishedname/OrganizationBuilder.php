@@ -12,10 +12,7 @@ class OrganizationBuilder
     }
 
     /**
-     *
-     * @param string $name
-     *            e.g. 'Company Name, LLC'
-     * @return OrganizationalUnitBuilder
+     * @param string $name e.g. 'Company Name, LLC'
      */
     public function setOrganizationName(string $name): OrganizationalUnitBuilder
     {

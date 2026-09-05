@@ -2,35 +2,25 @@
 
 namespace tagadvance\elephant\cryptography;
 
+/**
+ * Wraps another Cryptographer so its raw ciphertext bytes survive being stored or
+ * transmitted as text.
+ */
 class Base64Cryptographer implements Cryptographer
 {
-    /**
-     *
-     * @var Cryptographer
-     */
     private Cryptographer $delegate;
 
-    /**
-     *
-     * @param Cryptographer $delegate
-     * @return \tagadvance\elephant\cryptography\Base64Cryptographer
-     */
     public static function create(Cryptographer $delegate): self
     {
         return new self($delegate);
     }
 
-    /**
-     *
-     * @param Cryptographer $delegate
-     */
     public function __construct(Cryptographer $delegate)
     {
         $this->delegate = $delegate;
     }
 
     /**
-     *
      * {@inheritdoc}
      * @see \tagadvance\elephant\cryptography\Cryptographer::encrypt()
      */
@@ -40,7 +30,10 @@ class Base64Cryptographer implements Cryptographer
     }
 
     /**
+     * Decoding is strict, so malformed input is rejected here rather than being salvaged
+     * into bytes that fail confusingly further down.
      *
+     * @throws CryptographyException if $data is not valid base64
      * {@inheritdoc}
      * @see \tagadvance\elephant\cryptography\Cryptographer::decrypt()
      */

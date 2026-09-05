@@ -2,34 +2,28 @@
 
 namespace tagadvance\elephant\cryptography;
 
+/**
+ * Encrypts with a public key using OAEP, and verifies with it using PKCS #1 v1.5.
+ *
+ * encrypt() gives real confidentiality and is undone by PrivateKeyCryptographer::decrypt().
+ * decrypt() is the verify half of a signature and undoes
+ * PrivateKeyCryptographer::encrypt() — the two methods here are not each other's inverse.
+ */
 class PublicKeyCryptographer extends AbstractCryptographer
 {
-    /**
-     *
-     * @var PublicKey
-     */
     private PublicKey $publicKey;
 
-    /**
-     *
-     * @param PublicKey $publicKey
-     */
     public function __construct(PublicKey $publicKey)
     {
         $this->publicKey = $publicKey;
     }
 
-    /**
-     *
-     * @return PublicKey
-     */
     public function getKey(): PublicKey
     {
         return $this->publicKey;
     }
 
     /**
-     *
      * {@inheritdoc}
      * @see Cryptographer::encrypt
      */
@@ -44,6 +38,8 @@ class PublicKeyCryptographer extends AbstractCryptographer
     }
 
     /**
+     * Recovers data written by PrivateKeyCryptographer::encrypt(). This is signature
+     * verification, not decryption — it proves the private key produced the input.
      *
      * {@inheritdoc}
      * @see Cryptographer::decrypt

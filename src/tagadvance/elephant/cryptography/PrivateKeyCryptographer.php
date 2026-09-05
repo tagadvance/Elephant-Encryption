@@ -2,24 +2,25 @@
 
 namespace tagadvance\elephant\cryptography;
 
+/**
+ * Signs with a private key using PKCS #1 v1.5, and decrypts with it using OAEP.
+ *
+ * decrypt() undoes PublicKeyCryptographer::encrypt(). The two methods here are not each
+ * other's inverse.
+ */
 class PrivateKeyCryptographer extends AbstractCryptographer
 {
-    /**
-     *
-     * @var PrivateKey
-     */
     private PrivateKey $key;
 
-    /**
-     *
-     * @param PrivateKey $key
-     */
     public function __construct(PrivateKey $key)
     {
         $this->key = $key;
     }
 
     /**
+     * Signs rather than conceals: the result is recoverable by anyone holding the public key,
+     * so it provides authenticity, never confidentiality. Undone by
+     * PublicKeyCryptographer::decrypt().
      *
      * {@inheritDoc}
      * @see Cryptographer::encrypt
@@ -35,7 +36,6 @@ class PrivateKeyCryptographer extends AbstractCryptographer
     }
 
     /**
-     *
      * {@inheritDoc}
      * @see Cryptographer::decrypt
      */

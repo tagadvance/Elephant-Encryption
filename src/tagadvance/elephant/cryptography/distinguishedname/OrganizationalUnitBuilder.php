@@ -12,10 +12,7 @@ class OrganizationalUnitBuilder
     }
 
     /**
-     *
-     * @param string $name
-     *            e.g. 'Development Team' or ''
-     * @return CommonBuilder
+     * @param string $name e.g. 'Development Team' or ''
      */
     public function setOrganizationUnitName(string $name): CommonBuilder
     {

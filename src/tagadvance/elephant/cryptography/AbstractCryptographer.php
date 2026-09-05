@@ -5,13 +5,16 @@ namespace tagadvance\elephant\cryptography;
 abstract class AbstractCryptographer implements Cryptographer
 {
     /**
+     * Runs $function over $data one $size block at a time and concatenates the results.
      *
-     * @param callable $function
-     * @param string $data
-     * @param int $size
-     * @param string $message
-     * @throws CryptographyException
-     * @return string
+     * Blocks carry no ordering or completeness information, so an attacker can reorder or
+     * drop ciphertext blocks and the decrypt still succeeds, yielding reordered or truncated
+     * plaintext. Anything needing integrity must add it around this.
+     *
+     * @param callable $function called as ($input, &$output); returns false on failure
+     * @param int $size block size in bytes
+     * @param string $message exception message used when a block fails
+     * @throws CryptographyException as soon as a block fails
      */
     protected function doCrypt(callable $function, string $data, int $size, string $message): string
     {

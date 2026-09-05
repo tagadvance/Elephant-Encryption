@@ -12,10 +12,7 @@ class CommonBuilder
     }
 
     /**
-     *
-     * @param string $name
-     *            e.g. 'Son, Goku'
-     * @return EmailAddressBuilder
+     * @param string $name e.g. 'Son, Goku'
      */
     public function setCommonName(string $name): EmailAddressBuilder
     {

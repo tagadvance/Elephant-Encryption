@@ -35,27 +35,18 @@ class ConfigurationBuilder
 
     private array $args;
 
-    /**
-     *
-     * @return self
-     */
     public static function builder(): self
     {
         return new self();
     }
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->args = [];
     }
 
     /**
-     *
-     * @param string $filename
-     * @return self
+     * @param string $filename an openssl.cnf; the CONFIG_* constants cover the common distros
      */
     public function setConfigurationFile(string $filename): self
     {
@@ -66,9 +57,7 @@ class ConfigurationBuilder
     /**
      * Select which digest method to use.
      *
-     * @param string $algorithm
-     *            e.g. 'SHA512'
-     * @return self
+     * @param string $algorithm e.g. 'sha512'
      */
     public function setDigestAlgorithm(string $algorithm): self
     {
@@ -79,9 +68,7 @@ class ConfigurationBuilder
     /**
      * Select which extensions should be used when creating an x509 certificate.
      *
-     * @param string $extensions
-     *            e.g. 'v3_ca'
-     * @return self
+     * @param string $extensions e.g. 'v3_ca'
      */
     public function setX509Extensions(string $extensions): self
     {
@@ -92,9 +79,7 @@ class ConfigurationBuilder
     /**
      * Select which extensions should be used when creating a CSR.
      *
-     * @param string $extensions
-     *            e.g. 'v3_req'
-     * @return self
+     * @param string $extensions e.g. 'v3_req'
      */
     public function setRequiredExtensions(string $extensions): self
     {
@@ -105,9 +90,9 @@ class ConfigurationBuilder
     /**
      * Specify how many bits should be used to generate a private key.
      *
-     * @param int $bits
-     *            e.g. 4096
-     * @return self
+     * Warns via E_USER_WARNING below 2048 bits but still accepts the value.
+     *
+     * @param int $bits e.g. 4096
      */
     public function setPrivateKeyBits(int $bits): self
     {
@@ -124,9 +109,7 @@ class ConfigurationBuilder
      * Specify the type of private key to create.
      * This can be one of OPENSSL_KEYTYPE_DSA, OPENSSL_KEYTYPE_DH or OPENSSL_KEYTYPE_RSA. The default value is OPENSSL_KEYTYPE_RSA which is currently the only supported key type.
      *
-     * @param int $type
-     *            e.g. OPENSSL_KEYTYPE_RSA
-     * @return self
+     * @param int $type e.g. OPENSSL_KEYTYPE_RSA
      */
     public function setPrivateKeyType(int $type = OPENSSL_KEYTYPE_RSA): self
     {
@@ -136,9 +119,6 @@ class ConfigurationBuilder
 
     /**
      * Should an exported key (with passphrase) be encrypted?
-     *
-     * @param bool $b
-     * @return self
      */
     public function encryptKey(bool $b = true): self
     {
@@ -147,10 +127,8 @@ class ConfigurationBuilder
     }
 
     /**
-     * One of <a href="http://www.php.net/manual/en/openssl.ciphers.php">cipher constants</a>.
-     *
-     * @param integer $cypher
-     * @return self
+     * @param int $cypher one of the OPENSSL_CIPHER_* constants
+     * @see https://www.php.net/manual/en/openssl.ciphers.php
      */
     public function withCypher(int $cypher): self
     {
@@ -159,8 +137,7 @@ class ConfigurationBuilder
     }
 
     /**
-     *
-     * @return array
+     * @return array the config array openssl_pkey_new() and openssl_csr_new() expect
      */
     public function build(): array
     {

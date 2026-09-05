@@ -12,10 +12,7 @@ class CountryNameBuilder
     }
 
     /**
-     *
-     * @param string $countryName
-     *            e.g. 'US'
-     * @return StateOrProvinceBuilder
+     * @param string $countryName e.g. 'US'
      */
     public function setCountryName(string $countryName): StateOrProvinceBuilder
     {

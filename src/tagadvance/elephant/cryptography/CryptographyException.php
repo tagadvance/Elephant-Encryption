@@ -4,10 +4,13 @@ namespace tagadvance\elephant\cryptography;
 
 use RuntimeException;
 
+/**
+ * Raised whenever an openssl_* call fails. Detail from the openssl error queue is on the
+ * message and, separately, on getOpenSSLErrors().
+ */
 class CryptographyException extends RuntimeException
 {
     /**
-     *
      * @var list<string>
      */
     private array $opensslErrors = [];
@@ -16,10 +19,8 @@ class CryptographyException extends RuntimeException
      * Builds an exception describing a failed openssl_* call. The detail is taken from the
      * openssl error queue, falling back to the PHP diagnostic when the queue is empty.
      *
-     * @param string $message
-     * @param list<string> $opensslErrors
-     * @param string|null $diagnostic
-     * @return self
+     * @param list<string> $opensslErrors the drained openssl error queue; may be empty
+     * @param string|null $diagnostic the PHP warning the call raised, used when the queue is empty
      */
     public static function fromOpenSSL(string $message, array $opensslErrors, ?string $diagnostic = null): self
     {
