@@ -8,14 +8,14 @@ class Base64Cryptographer implements Cryptographer
      *
      * @var Cryptographer
      */
-    private $delegate;
+    private Cryptographer $delegate;
 
     /**
      *
      * @param Cryptographer $delegate
      * @return \tagadvance\elephant\cryptography\Base64Cryptographer
      */
-    public static function create(Cryptographer $delegate)
+    public static function create(Cryptographer $delegate): self
     {
         return new self($delegate);
     }
