@@ -23,6 +23,35 @@ class PublicKeyTest extends TestCase
         $this->assertInstanceOf(PublicKey::class, $publicKey);
     }
 
+    public function testCreateFromPem()
+    {
+        $path = __DIR__ . '/../../../resources/elephant.key';
+        $privateKey = PrivateKey::createFromFile(new SplFileInfo($path));
+        $pem = $privateKey->getDetails()['key'];
+
+        $publicKey = PublicKey::createFromPem($pem);
+
+        // The key is usable, not merely constructed.
+        $data = 'attack at dawn';
+        $encrypter = new PublicKeyCryptographer($publicKey);
+        $decrypter = new PrivateKeyCryptographer($privateKey);
+        $this->assertSame($data, $decrypter->decrypt($encrypter->encrypt($data)));
+    }
+
+    public function testCreateFromPemRejectsGarbage()
+    {
+        $this->expectException(CryptographyException::class);
+        $this->expectExceptionMessage('could not read public key');
+        PublicKey::createFromPem('not a key');
+    }
+
+    public function testConstructorIsPrivate()
+    {
+        $constructor = (new \ReflectionClass(PublicKey::class))->getConstructor();
+
+        $this->assertTrue($constructor->isPrivate());
+    }
+
     public function testCalculateEncryptSize()
     {
         $publicKey = $this->newPublicKey();

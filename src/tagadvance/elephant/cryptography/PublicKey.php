@@ -2,27 +2,23 @@
 
 namespace tagadvance\elephant\cryptography;
 
+use OpenSSLAsymmetricKey;
+
 class PublicKey
 {
-    /**
-     *
-     * @var string
-     */
-    private string $key;
+    private OpenSSLAsymmetricKey $key;
 
     /**
+     * Takes the public key out of a certificate. openssl will accept a certificate wherever
+     * a public key is wanted, but the two are not interchangeable to a reader, so the key is
+     * extracted here rather than carried around as a certificate.
      *
-     * @param Certificate $certificate
-     * @throws CryptographyException
-     * @return self
+     * @throws CryptographyException if the certificate carries no readable public key
      */
     public static function createFromCertificate(Certificate $certificate): self
     {
-        $key = '';
-        OpenSSL::call(
-            function () use ($certificate, &$key) {
-                return openssl_x509_export($certificate->getCertificate(), $key);
-            },
+        $key = OpenSSL::call(
+            fn() => openssl_pkey_get_public($certificate->getCertificate()),
             'could not create public key from certificate',
         );
 
@@ -30,29 +26,35 @@ class PublicKey
     }
 
     /**
-     *
-     * @param string $key
+     * @param string $pem a PEM-encoded public key, or a certificate to take one from
+     * @throws CryptographyException if the PEM cannot be read as a public key
      */
-    public function __construct(string $key)
+    public static function createFromPem(string $pem): self
+    {
+        $key = OpenSSL::call(
+            fn() => openssl_pkey_get_public($pem),
+            'could not read public key',
+        );
+
+        return new self($key);
+    }
+
+    private function __construct(OpenSSLAsymmetricKey $key)
     {
         $this->key = $key;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getKey(): string
+    public function getKey(): OpenSSLAsymmetricKey
     {
         return $this->key;
     }
 
     /**
-     * Public-key encryption uses OAEP, so the overhead is OAEP's and not PKCS #1 v1.5's.
-     * PrivateKey::calculateEncryptSize() subtracts the smaller PADDING because
-     * private-key encryption is a v1.5 signature operation.
+     * The largest plaintext a single encrypt can take.
      *
-     * @return int
+     * Public-key encryption uses OAEP, so the overhead is OAEP's and not PKCS #1 v1.5's.
+     * PrivateKey::calculateEncryptSize() subtracts the smaller PADDING because private-key
+     * encryption is a v1.5 signature operation.
      */
     public function calculateEncryptSize(): int
     {
@@ -60,27 +62,20 @@ class PublicKey
     }
 
     /**
-     *
-     * @throws CryptographyException
-     * @return array
-     * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+     * @return array the key's details, as documented for openssl_pkey_get_details()
+     * @throws CryptographyException if the details cannot be read
+     * @see https://www.php.net/manual/en/function.openssl-pkey-get-details.php
      */
     public function getDetails(): array
     {
-        $key = OpenSSL::call(
-            fn() => openssl_pkey_get_public($this->key),
-            'could not read public key',
-        );
-
         return OpenSSL::call(
-            fn() => openssl_pkey_get_details($key),
+            fn() => openssl_pkey_get_details($this->key),
             'could not get details',
         );
     }
 
     /**
-     *
-     * @return int
+     * The size of one ciphertext block, which is the modulus rounded up to whole bytes.
      */
     public function calculateDecryptSize(): int
     {
