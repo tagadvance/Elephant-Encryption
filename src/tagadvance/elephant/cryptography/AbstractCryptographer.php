@@ -15,7 +15,7 @@ abstract class AbstractCryptographer implements Cryptographer
     protected function doCrypt(callable $function, string $data, int $size): string
     {
         $return = '';
-        while ($data) {
+        while ($data !== '') {
             $input = substr($data, $start = 0, $size);
 
             $output = null;

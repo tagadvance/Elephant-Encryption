@@ -73,6 +73,28 @@ class CryptographerTest extends TestCase
         }
     }
 
+    public function testPublicEncryptRoundTripOfFalsyData(): void
+    {
+        $encrypter = new PublicKeyCryptographer($this->privateKey, $this->publicKey);
+        $decrypter = new PrivateKeyCryptographer($this->privateKey);
+
+        $maximum = $this->privateKey->calculateDecryptSize() - OpenSSL::OAEP_PADDING;
+        foreach (['0', str_repeat('a', $maximum) . '0'] as $data) {
+            $this->assertSame($data, $decrypter->decrypt($encrypter->encrypt($data)));
+        }
+    }
+
+    public function testPrivateEncryptRoundTripOfFalsyData(): void
+    {
+        $encrypter = new PrivateKeyCryptographer($this->privateKey);
+        $decrypter = new PublicKeyCryptographer($this->privateKey, $this->publicKey);
+
+        $maximum = $this->privateKey->calculateEncryptSize();
+        foreach (['0', str_repeat('a', $maximum) . '0'] as $data) {
+            $this->assertSame($data, $decrypter->decrypt($encrypter->encrypt($data)));
+        }
+    }
+
     public function testPrivateEncryptRoundTripAtPkcs1Boundary(): void
     {
         $encrypter = new PrivateKeyCryptographer($this->privateKey);
