@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/tagadvance/Elephant-Encryption.svg?branch=master)](https://travis-ci.org/tagadvance/Elephant-Encryption)
+[![CI](https://github.com/tagadvance/Elephant-Encryption/actions/workflows/ci.yml/badge.svg)](https://github.com/tagadvance/Elephant-Encryption/actions/workflows/ci.yml)
+[![PHP](https://img.shields.io/badge/php-%3E%3D8.4-777bb4.svg)](https://www.php.net/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 # Elephant Encryption
 
@@ -66,7 +68,7 @@ $file = new File(CERTIFICATE_PATH);
 $certificate->exportToFile($file);
 ```
 
-```bash
+```php
 $data = <<<DATA
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
 minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
@@ -86,3 +88,7 @@ $privateKeyCryptographer = Base64Cryptographer::create(new PrivateKeyCryptograph
 $decryptedData = $privateKeyCryptographer->decrypt($encryptedData);
 Standard::output()->printLine("Decrypted Data: $decryptedData");
 ```
+
+## Sponsor
+
+If Elephant Encryption is useful to you, you can [sponsor me on GitHub](https://github.com/sponsors/tagadvance).
