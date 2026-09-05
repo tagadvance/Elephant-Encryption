@@ -11,7 +11,7 @@ class PrivateKeyTest extends TestCase
     {
         $configuration = ConfigurationBuilder::builder();
         $privateKey = PrivateKey::newPrivateKey($configuration);
-        $this->assertTrue(true);
+        $this->assertInstanceOf(PrivateKey::class, $privateKey);
     }
 
     public function testNewPrivateKeyWithBogusConfigurationThrowsCryptographyException()
@@ -22,8 +22,7 @@ class PrivateKeyTest extends TestCase
         $configuration->method('build')->willReturn([
             'private_key_bits' => 0,
         ]);
-        $privateKey = PrivateKey::newPrivateKey($configuration);
-        $this->assertTrue(true);
+        PrivateKey::newPrivateKey($configuration);
     }
 
     public function testCreateFromFile()
@@ -31,7 +30,7 @@ class PrivateKeyTest extends TestCase
         $path = __DIR__ . '/../../../resources/elephant.key';
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
-        $this->assertTrue(true);
+        $this->assertInstanceOf(PrivateKey::class, $key);
     }
 
     public function testCreateFromFileWithPassword()
@@ -55,7 +54,7 @@ class PrivateKeyTest extends TestCase
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
         $details = $key->getDetails();
-        $this->assertTrue(true);
+        $this->assertArrayHasKey('bits', $details);
     }
 
     public function testExport()

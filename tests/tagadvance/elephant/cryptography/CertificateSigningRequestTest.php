@@ -25,14 +25,12 @@ class CertificateSigningRequestTest extends TestCase
 
     public function testNewCertificateSigningRequest()
     {
-        $this->csr->sign($this->privateKey);
-        $this->assertTrue(true);
+        $this->assertInstanceOf(Certificate::class, $this->csr->sign($this->privateKey));
     }
 
     public function testSign()
     {
-        $this->csr->sign($this->privateKey);
-        $this->assertTrue(true);
+        $this->assertInstanceOf(Certificate::class, $this->csr->sign($this->privateKey));
     }
 
     public function testSignWithBogusPrivateKey()

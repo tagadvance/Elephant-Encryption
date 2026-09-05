@@ -15,7 +15,7 @@ class OpenSSLTest extends TestCase
     public function testClearErrors(): void
     {
         OpenSSL::clearErrors();
-        $this->assertTrue(true);
+        $this->assertFalse(openssl_error_string());
     }
 
     public function testPrintErrors(): void

@@ -20,7 +20,7 @@ class PublicKeyTest extends TestCase
         $certificate = $csr->sign($privateKey);
 
         $publicKey = PublicKey::createFromCertificate($certificate);
-        $this->assertTrue(true);
+        $this->assertInstanceOf(PublicKey::class, $publicKey);
     }
 
     public function testCalculateEncryptSize()

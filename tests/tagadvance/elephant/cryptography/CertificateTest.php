@@ -31,7 +31,7 @@ class CertificateTest extends TestCase
         $path = __DIR__ . '/../../../resources/elephant.cert';
         $file = new SplFileInfo($path);
         $certificate = Certificate::createFromFile($file);
-        $this->assertTrue(true);
+        $this->assertInstanceOf(Certificate::class, $certificate);
     }
 
     public function testExport()
