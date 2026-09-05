@@ -1,8 +1,8 @@
 {
 	"name" : "tagadvance/elephant",
-	"description" : "...",
-	"type" : "project",
-	"keywords": [],
+	"description" : "A strongly-typed wrapper around PHP's OpenSSL extension for RSA keys, certificates, and encryption.",
+	"type" : "library",
+	"keywords": ["openssl", "cryptography", "encryption", "rsa", "x509", "certificate"],
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Tag",
