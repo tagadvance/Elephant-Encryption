@@ -53,7 +53,7 @@ class CertificateSigningRequest
                 return new Certificate($certificate);
             }
         } catch (Throwable $t) {
-            throw new CryptographyException('could not sign certificate signing request', $code = null, $t);
+            throw new CryptographyException('could not sign certificate signing request', $code = 0, $t);
         }
         throw new CryptographyException('could not sign certificate signing request');
     }

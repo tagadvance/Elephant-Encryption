@@ -26,7 +26,7 @@ class PrivateKey
                 return new self($key);
             }
         } catch (Throwable $t) {
-            throw new CryptographyException('could not create private key', $code = null, $t);
+            throw new CryptographyException('could not create private key', $code = 0, $t);
         }
 
         throw new CryptographyException('could not create private key');
