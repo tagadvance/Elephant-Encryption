@@ -5,7 +5,6 @@ namespace tagadvance\elephant\cryptography;
 use InvalidArgumentException;
 use OpenSSLCertificate;
 use SplFileInfo;
-use tagadvance\gilligan\io\File;
 
 class Certificate
 {
@@ -13,7 +12,7 @@ class Certificate
 
     /**
      *
-     * @param File $file
+     * @param SplFileInfo $file
      * @throws CryptographyException
      * @return self
      */
