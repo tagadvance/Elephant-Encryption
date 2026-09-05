@@ -104,11 +104,9 @@ class PrivateKeyTest extends TestCase
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
 
-        $path = '/tmp/elephant.key';
-        $file = new SplFileInfo($path);
-        $export = $key->export($file);
+        $export = $key->export();
 
-        $this->assertStringStartsWith($prefix = '-----BEGIN', $export);
+        $this->assertStringStartsWith($prefix = '-----BEGIN PRIVATE KEY-----', $export);
         $this->assertStringEndsWith($prefix = 'PRIVATE KEY-----', trim($export));
     }
 
