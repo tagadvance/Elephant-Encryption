@@ -42,7 +42,7 @@ class PrivateKey {
      * @return self
      * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
      */
-    static function createFromFile(SplFileInfo $file, string $password = null): self {
+    static function createFromFile(SplFileInfo $file, ?string $password = null): self {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $key = openssl_pkey_get_private($filePath, $password);
@@ -106,7 +106,7 @@ class PrivateKey {
      * @param array|null $configuration
      * @return string
      */
-    function export(string $password = null, array $configuration = null): string {
+    function export(?string $password = null, ?array $configuration = null): string {
         $output = '';
         $isExported = openssl_pkey_export($this->key, $output, $password, $configuration);
         if ($isExported) {
@@ -122,7 +122,7 @@ class PrivateKey {
      * @param array|null $configuration
      * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
      */
-    function exportToFile(SplFileInfo $file, string $password = null, array $configuration = null): void {
+    function exportToFile(SplFileInfo $file, ?string $password = null, ?array $configuration = null): void {
         $path = $file->getPathname();
         $result = openssl_pkey_export_to_file($this->key, $path, $password, $configuration);
         if (! $result) {
