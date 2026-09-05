@@ -25,12 +25,32 @@ class PublicKeyTest extends TestCase
 
     public function testCalculateEncryptSize()
     {
-        $this->markTestSkipped();
+        $publicKey = $this->newPublicKey();
+
+        $expected = $publicKey->calculateDecryptSize() - OpenSSL::PADDING;
+        $this->assertSame($expected, $publicKey->calculateEncryptSize());
     }
 
-    public function calculateDecryptSize()
+    public function testCalculateDecryptSize()
     {
-        $this->markTestSkipped();
+        $publicKey = $this->newPublicKey();
+
+        $bits = $publicKey->getDetails()['bits'];
+        $this->assertSame($bits / 8, $publicKey->calculateDecryptSize());
+    }
+
+    private function newPublicKey(): PublicKey
+    {
+        $builder = new ArrayBuilder([]);
+
+        $path = __DIR__ . '/../../../resources/elephant.key';
+        $file = new SplFileInfo($path);
+        $privateKey = PrivateKey::createFromFile($file);
+
+        $csr = CertificateSigningRequest::newCertificateSigningRequest($builder, $privateKey);
+        $certificate = $csr->sign($privateKey);
+
+        return PublicKey::createFromCertificate($certificate);
     }
 
 }
