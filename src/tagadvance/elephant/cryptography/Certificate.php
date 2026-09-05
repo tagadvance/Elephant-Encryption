@@ -7,8 +7,8 @@ use OpenSSLCertificate;
 use SplFileInfo;
 use tagadvance\gilligan\io\File;
 
-class Certificate {
-
+class Certificate
+{
     /**
      *
      * @var resource
@@ -21,7 +21,8 @@ class Certificate {
      * @throws CryptographyException
      * @return self
      */
-    static function createFromFile(SplFileInfo $file): self {
+    public static function createFromFile(SplFileInfo $file): self
+    {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $certificate = openssl_x509_read($filePath);
@@ -36,7 +37,8 @@ class Certificate {
      * @param OpenSSLCertificate $certificate
      * @throws InvalidArgumentException
      */
-    function __construct(OpenSSLCertificate $certificate) {
+    public function __construct(OpenSSLCertificate $certificate)
+    {
         $this->certificate = $certificate;
     }
 
@@ -44,7 +46,8 @@ class Certificate {
      *
      * @return resource
      */
-    function getCertificate() {
+    public function getCertificate()
+    {
         return $this->certificate;
     }
 
@@ -54,7 +57,8 @@ class Certificate {
      * @throws CryptographyException
      * @return string
      */
-    function export(bool $includeHumanReadableInformation = false): string {
+    public function export(bool $includeHumanReadableInformation = false): string
+    {
         $output = '';
         $isExported = openssl_x509_export($this->certificate, $output, ! $includeHumanReadableInformation);
         if ($isExported) {
@@ -69,7 +73,8 @@ class Certificate {
      * @param bool $includeHumanReadableInformation
      * @throws CryptographyException
      */
-    function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
+    public function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void
+    {
         $filePath = $file->getPathname();
         $isExported = openssl_x509_export_to_file($this->certificate, $filePath, ! $includeHumanReadableInformation);
         if (! $isExported) {

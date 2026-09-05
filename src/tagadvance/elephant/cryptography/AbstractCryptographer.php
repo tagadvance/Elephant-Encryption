@@ -2,8 +2,8 @@
 
 namespace tagadvance\elephant\cryptography;
 
-abstract class AbstractCryptographer implements Cryptographer {
-
+abstract class AbstractCryptographer implements Cryptographer
+{
     /**
      *
      * @param callable $function
@@ -12,18 +12,19 @@ abstract class AbstractCryptographer implements Cryptographer {
      * @throws CryptographyException
      * @return string
      */
-    protected function doCrypt(callable $function, string $data, int $size): string {
+    protected function doCrypt(callable $function, string $data, int $size): string
+    {
         $return = '';
         while ($data) {
             $input = substr($data, $start = 0, $size);
-            
+
             $output = null;
             $success = $function($input, $output);
             if (! $success) {
                 throw new CryptographyException();
             }
             $return .= $output;
-            
+
             $data = substr($data, $size);
         }
         return $return;

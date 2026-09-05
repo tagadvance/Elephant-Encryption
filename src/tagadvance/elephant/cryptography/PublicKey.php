@@ -2,8 +2,8 @@
 
 namespace tagadvance\elephant\cryptography;
 
-class PublicKey {
-
+class PublicKey
+{
     /**
      *
      * @var string
@@ -11,12 +11,13 @@ class PublicKey {
     private string $key;
 
     /**
-     * 
+     *
      * @param Certificate $certificate
      * @throws CryptographyException
      * @return self
      */
-    static function createFromCertificate(Certificate $certificate): self {
+    public static function createFromCertificate(Certificate $certificate): self
+    {
         $key = '';
         $isExported = openssl_x509_export($certificate->getCertificate(), $key);
         if ($isExported) {
@@ -29,7 +30,8 @@ class PublicKey {
      *
      * @param string $key
      */
-    function __construct(string $key) {
+    public function __construct(string $key)
+    {
         $this->key = $key;
     }
 
@@ -37,7 +39,8 @@ class PublicKey {
      *
      * @return string
      */
-    function getKey(): string {
+    public function getKey(): string
+    {
         return $this->key;
     }
 
@@ -45,7 +48,8 @@ class PublicKey {
      *
      * @return int
      */
-    function calculateEncryptSize(): int {
+    public function calculateEncryptSize(): int
+    {
         return $this->calculateDecryptSize() - OpenSSL::PADDING;
     }
 
@@ -53,7 +57,8 @@ class PublicKey {
      *
      * @return int
      */
-    function calculateDecryptSize(): int {
+    public function calculateDecryptSize(): int
+    {
         $details = $this->getDetails();
         $bits = $details['bits'];
         return $bits / $bitsPerByte = 8;

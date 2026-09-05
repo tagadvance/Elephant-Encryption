@@ -2,15 +2,15 @@
 
 namespace tagadvance\elephant\cryptography;
 
-interface Cryptographer {
-
+interface Cryptographer
+{
     /**
      *
      * @param string $data
      * @return string The encrypted data.
      * @throws CryptographyException
      */
-    function encrypt(string $data): string;
+    public function encrypt(string $data): string;
 
     /**
      *
@@ -18,6 +18,6 @@ interface Cryptographer {
      * @return string The decrypted data.
      * @throws CryptographyException
      */
-    function decrypt(string $data): string;
+    public function decrypt(string $data): string;
 
 }

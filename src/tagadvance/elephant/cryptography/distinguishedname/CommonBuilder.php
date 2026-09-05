@@ -4,10 +4,9 @@ namespace tagadvance\elephant\cryptography\distinguishedname;
 
 class CommonBuilder
 {
-
     private array $args;
 
-    function __construct(array $args)
+    public function __construct(array $args)
     {
         $this->args = $args;
     }
@@ -18,7 +17,7 @@ class CommonBuilder
      *            e.g. 'Son, Goku'
      * @return EmailAddressBuilder
      */
-    function setCommonName(string $name): EmailAddressBuilder
+    public function setCommonName(string $name): EmailAddressBuilder
     {
         $this->args['commonName'] = $name;
         return new EmailAddressBuilder($this->args);

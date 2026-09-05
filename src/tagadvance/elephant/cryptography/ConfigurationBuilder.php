@@ -8,45 +8,47 @@ namespace tagadvance\elephant\cryptography;
  * @author Tag <tagadvance+elephant@gmail.com>
  * @see http://php.net/manual/en/function.openssl-csr-new.php
  */
-class ConfigurationBuilder {
-
+class ConfigurationBuilder
+{
     /**
      * Debian and derivatives, e.g. Ubuntu, Mint, etc...
-     * 
+     *
      * @var string
      */
-    const CONFIG_DEBIAN = '/etc/ssl/openssl.cnf';
+    public const CONFIG_DEBIAN = '/etc/ssl/openssl.cnf';
 
     /**
      * RHEL and derivatives, e.g. CentOS, Redhat, Fedora, etc...
-     * 
+     *
      * @var string
      */
-    const CONFIG_RHEL = '/etc/pki/tls/openssl.cnf';
+    public const CONFIG_RHEL = '/etc/pki/tls/openssl.cnf';
 
     /**
      * FIXME: windows
-     * 
+     *
      * @var string
      */
-    const CONFIG_WINDOWS = null;
+    public const CONFIG_WINDOWS = null;
 
     private const MINIMUM_RECOMMENDED_KEY_SIZE = 2048;
 
     private array $args;
 
     /**
-     * 
+     *
      * @return self
      */
-    static function builder(): self {
+    public static function builder(): self
+    {
         return new self();
     }
 
     /**
-     * 
+     *
      */
-    function __construct() {
+    public function __construct()
+    {
         $this->args = [];
     }
 
@@ -55,7 +57,8 @@ class ConfigurationBuilder {
      * @param string $filename
      * @return self
      */
-    function setConfigurationFile(string $filename): self {
+    public function setConfigurationFile(string $filename): self
+    {
         $this->args['config'] = $filename;
         return $this;
     }
@@ -67,7 +70,8 @@ class ConfigurationBuilder {
      *            e.g. 'SHA512'
      * @return self
      */
-    function setDigestAlgorithm(string $algorithm): self {
+    public function setDigestAlgorithm(string $algorithm): self
+    {
         $this->args['digest_alg'] = $algorithm;
         return $this;
     }
@@ -79,7 +83,8 @@ class ConfigurationBuilder {
      *            e.g. 'v3_ca'
      * @return self
      */
-    function setX509Extensions(string $extensions): self {
+    public function setX509Extensions(string $extensions): self
+    {
         $this->args['x509_extensions'] = $extensions;
         return $this;
     }
@@ -91,7 +96,8 @@ class ConfigurationBuilder {
      *            e.g. 'v3_req'
      * @return self
      */
-    function setRequiredExtensions(string $extensions): self {
+    public function setRequiredExtensions(string $extensions): self
+    {
         $this->args['req_extensions'] = $extensions;
         return $this;
     }
@@ -103,12 +109,13 @@ class ConfigurationBuilder {
      *            e.g. 4096
      * @return self
      */
-    function setPrivateKeyBits(int $bits): self {
+    public function setPrivateKeyBits(int $bits): self
+    {
         if ($bits < self::MINIMUM_RECOMMENDED_KEY_SIZE) {
             $message = sprintf('minimum recommended key size is %d bits', self::MINIMUM_RECOMMENDED_KEY_SIZE);
             trigger_error($message, E_USER_WARNING);
         }
-        
+
         $this->args['private_key_bits'] = $bits;
         return $this;
     }
@@ -121,7 +128,8 @@ class ConfigurationBuilder {
      *            e.g. OPENSSL_KEYTYPE_RSA
      * @return self
      */
-    function setPrivateKeyType(int $type = OPENSSL_KEYTYPE_RSA): self {
+    public function setPrivateKeyType(int $type = OPENSSL_KEYTYPE_RSA): self
+    {
         $this->args['private_key_type'] = $type;
         return $this;
     }
@@ -132,7 +140,8 @@ class ConfigurationBuilder {
      * @param bool $b
      * @return self
      */
-    function encryptKey(bool $b = true): self {
+    public function encryptKey(bool $b = true): self
+    {
         $this->args['encrypt_key'] = $b;
         return $this;
     }
@@ -143,7 +152,8 @@ class ConfigurationBuilder {
      * @param integer $cypher
      * @return self
      */
-    function withCypher(int $cypher): self {
+    public function withCypher(int $cypher): self
+    {
         $this->args['encrypt_key_cipher'] = $cypher;
         return $this;
     }
@@ -152,7 +162,8 @@ class ConfigurationBuilder {
      *
      * @return array
      */
-    function build(): array {
+    public function build(): array
+    {
         return $this->args;
     }
 

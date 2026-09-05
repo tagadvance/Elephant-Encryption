@@ -7,8 +7,8 @@ use SplFileInfo;
 use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
 use Throwable;
 
-class CertificateSigningRequest {
-
+class CertificateSigningRequest
+{
     /**
      *
      * @var resource
@@ -22,7 +22,8 @@ class CertificateSigningRequest {
      * @throws CryptographyException
      * @return self
      */
-    static function newCertificateSigningRequest(ArrayBuilder $builder, PrivateKey $privateKey): self {
+    public static function newCertificateSigningRequest(ArrayBuilder $builder, PrivateKey $privateKey): self
+    {
         $dn = $builder->build();
         $key = $privateKey->getKey();
         $csr = openssl_csr_new($dn, $key);
@@ -36,7 +37,8 @@ class CertificateSigningRequest {
      *
      * @param OpenSSLCertificateSigningRequest $csr
      */
-    private function __construct(OpenSSLCertificateSigningRequest $csr) {
+    private function __construct(OpenSSLCertificateSigningRequest $csr)
+    {
         $this->csr = $csr;
     }
 
@@ -47,7 +49,8 @@ class CertificateSigningRequest {
      * @throws CryptographyException
      * @return Certificate
      */
-    function sign(PrivateKey $privateKey, int $days = 365): Certificate {
+    public function sign(PrivateKey $privateKey, int $days = 365): Certificate
+    {
         try {
             $certificate = openssl_csr_sign($this->csr, $cacert = null, $privateKey->getKey(), $days);
             if ($certificate !== false) {
@@ -65,7 +68,8 @@ class CertificateSigningRequest {
      * @throws CryptographyException
      * @return string
      */
-    function export(bool $includeHumanReadableInformation = false): string {
+    public function export(bool $includeHumanReadableInformation = false): string
+    {
         $out = '';
         $isExported = openssl_csr_export($this->csr, $out, ! $includeHumanReadableInformation);
         if (! $isExported) {
@@ -80,7 +84,8 @@ class CertificateSigningRequest {
      * @param bool $includeHumanReadableInformation
      * @throws CryptographyException
      */
-    function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void {
+    public function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void
+    {
         $filePath = $file->getPathname();
         $isExported = openssl_csr_export_to_file($this->csr, $filePath, ! $includeHumanReadableInformation);
         if (! $isExported) {

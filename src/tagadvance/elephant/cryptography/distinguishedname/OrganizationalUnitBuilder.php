@@ -4,10 +4,9 @@ namespace tagadvance\elephant\cryptography\distinguishedname;
 
 class OrganizationalUnitBuilder
 {
-
     private array $args;
 
-    function __construct(array $args)
+    public function __construct(array $args)
     {
         $this->args = $args;
     }
@@ -18,7 +17,7 @@ class OrganizationalUnitBuilder
      *            e.g. 'Development Team' or ''
      * @return CommonBuilder
      */
-    function setOrganizationUnitName(string $name): CommonBuilder
+    public function setOrganizationUnitName(string $name): CommonBuilder
     {
         $this->args['organizationalUnitName'] = $name;
         return new CommonBuilder($this->args);

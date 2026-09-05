@@ -6,8 +6,8 @@ use OpenSSLAsymmetricKey;
 use SplFileInfo;
 use Throwable;
 
-class PrivateKey {
-
+class PrivateKey
+{
     /**
      *
      * @var resource
@@ -21,7 +21,8 @@ class PrivateKey {
      * @return self
      * @see http://php.net/manual/en/function.openssl-pkey-new.php
      */
-    static function newPrivateKey(ConfigurationBuilder $builder): self {
+    public static function newPrivateKey(ConfigurationBuilder $builder): self
+    {
         $configArgs = $builder->build();
         try {
             $key = openssl_pkey_new($configArgs);
@@ -42,7 +43,8 @@ class PrivateKey {
      * @return self
      * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
      */
-    static function createFromFile(SplFileInfo $file, ?string $password = null): self {
+    public static function createFromFile(SplFileInfo $file, ?string $password = null): self
+    {
         $path = $file->getRealPath();
         $filePath = "file://$path";
         $key = openssl_pkey_get_private($filePath, $password);
@@ -53,18 +55,20 @@ class PrivateKey {
     }
 
     /**
-     * 
+     *
      * @param OpenSSLAsymmetricKey $key
      */
-    private function __construct(OpenSSLAsymmetricKey $key) {
+    private function __construct(OpenSSLAsymmetricKey $key)
+    {
         $this->key = $key;
     }
 
     /**
-     * 
+     *
      * @return resource
      */
-    function getKey() {
+    public function getKey()
+    {
         return $this->key;
     }
 
@@ -74,7 +78,8 @@ class PrivateKey {
      * @return array
      * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
      */
-    function getDetails(): array {
+    public function getDetails(): array
+    {
         $details = openssl_pkey_get_details($this->key);
         if ($details === false) {
             throw new CryptographyException('could not get details');
@@ -83,18 +88,20 @@ class PrivateKey {
     }
 
     /**
-     * 
+     *
      * @return int
      */
-    function calculateEncryptSize(): int {
+    public function calculateEncryptSize(): int
+    {
         return $this->calculateDecryptSize() - OpenSSL::PADDING;
     }
 
     /**
-     * 
+     *
      * @return int
      */
-    function calculateDecryptSize(): int {
+    public function calculateDecryptSize(): int
+    {
         $details = $this->getDetails();
         $bits = $details['bits'];
         return $bits / $bitsPerByte = 8;
@@ -106,7 +113,8 @@ class PrivateKey {
      * @param array|null $configuration
      * @return string
      */
-    function export(?string $password = null, ?array $configuration = null): string {
+    public function export(?string $password = null, ?array $configuration = null): string
+    {
         $output = '';
         $isExported = openssl_pkey_export($this->key, $output, $password, $configuration);
         if ($isExported) {
@@ -122,7 +130,8 @@ class PrivateKey {
      * @param array|null $configuration
      * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
      */
-    function exportToFile(SplFileInfo $file, ?string $password = null, ?array $configuration = null): void {
+    public function exportToFile(SplFileInfo $file, ?string $password = null, ?array $configuration = null): void
+    {
         $path = $file->getPathname();
         $result = openssl_pkey_export_to_file($this->key, $path, $password, $configuration);
         if (! $result) {

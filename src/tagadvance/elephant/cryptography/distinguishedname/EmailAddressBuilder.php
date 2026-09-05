@@ -4,10 +4,9 @@ namespace tagadvance\elephant\cryptography\distinguishedname;
 
 class EmailAddressBuilder
 {
-
     private array $args;
 
-    function __construct(array $args)
+    public function __construct(array $args)
     {
         $this->args = $args;
     }
@@ -18,7 +17,7 @@ class EmailAddressBuilder
      *            e.g. 'goku@intentionallyblankpage.com'
      * @return ArrayBuilder
      */
-    function setEmailAddress(string $address): ArrayBuilder
+    public function setEmailAddress(string $address): ArrayBuilder
     {
         $this->args['emailAddress'] = $address;
         return new ArrayBuilder($this->args);

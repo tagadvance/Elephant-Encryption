@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 namespace tagadvance\elephant\cryptography;
 
@@ -10,18 +10,20 @@ use tagadvance\gilligan\io\PrintStream;
  *
  * @author Tag <tagadvance+elephant@gmail.com>
  */
-class OpenSSLTest extends TestCase {
-
-    function testClearErrors(): void {
+class OpenSSLTest extends TestCase
+{
+    public function testClearErrors(): void
+    {
         OpenSSL::clearErrors();
         $this->assertTrue(true);
     }
 
-    function testPrintErrors(): void {
+    public function testPrintErrors(): void
+    {
         $mos = new MemoryOutputStream();
         $out = new PrintStream($mos);
         OpenSSL::printErrors($out);
-        
+
         $contents = $mos->getContents();
         $this->assertEmpty($contents);
     }

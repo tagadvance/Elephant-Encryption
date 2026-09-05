@@ -2,8 +2,8 @@
 
 namespace tagadvance\elephant\cryptography;
 
-class PublicKeyCryptographer extends AbstractCryptographer {
-
+class PublicKeyCryptographer extends AbstractCryptographer
+{
     /**
      *
      * @var PrivateKey
@@ -21,7 +21,8 @@ class PublicKeyCryptographer extends AbstractCryptographer {
      * @param PrivateKey $privateKey
      * @param PublicKey $publicKey
      */
-    function __construct(PrivateKey $privateKey, PublicKey $publicKey) {
+    public function __construct(PrivateKey $privateKey, PublicKey $publicKey)
+    {
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
     }
@@ -30,7 +31,8 @@ class PublicKeyCryptographer extends AbstractCryptographer {
      *
      * @return PublicKey
      */
-    function getKey(): PublicKey {
+    public function getKey(): PublicKey
+    {
         return $this->publicKey;
     }
 
@@ -39,7 +41,8 @@ class PublicKeyCryptographer extends AbstractCryptographer {
      * {@inheritdoc}
      * @see Cryptographer::encrypt
      */
-    function encrypt(string $data): string {
+    public function encrypt(string $data): string
+    {
         $key = $this->publicKey->getKey();
         $function = function ($input, &$output) use (&$key) {
             return openssl_public_encrypt($input, $output, $key, OPENSSL_PKCS1_OAEP_PADDING);
@@ -53,7 +56,8 @@ class PublicKeyCryptographer extends AbstractCryptographer {
      * {@inheritdoc}
      * @see Cryptographer::decrypt
      */
-    function decrypt(string $data): string {
+    public function decrypt(string $data): string
+    {
         $key = $this->publicKey->getKey();
         $function = function ($input, &$output) use (&$key) {
             return openssl_public_decrypt($input, $output, $key);

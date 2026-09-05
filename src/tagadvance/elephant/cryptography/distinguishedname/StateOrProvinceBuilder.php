@@ -4,10 +4,9 @@ namespace tagadvance\elephant\cryptography\distinguishedname;
 
 class StateOrProvinceBuilder
 {
-
     private array $args;
 
-    function __construct(array $args)
+    public function __construct(array $args)
     {
         $this->args = $args;
     }
@@ -18,7 +17,7 @@ class StateOrProvinceBuilder
      *            e.g. 'Oregon'
      * @return LocalityBuilder
      */
-    function setStateOrProvinceName(string $name): LocalityBuilder
+    public function setStateOrProvinceName(string $name): LocalityBuilder
     {
         $this->args['stateOrProvinceName'] = $name;
         return new LocalityBuilder($this->args);

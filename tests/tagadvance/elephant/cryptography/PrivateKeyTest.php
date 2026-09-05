@@ -5,38 +5,43 @@ namespace tagadvance\elephant\cryptography;
 use PHPUnit\Framework\TestCase;
 use SplFileInfo;
 
-class PrivateKeyTest extends TestCase {
-
-    function testNewPrivateKey() {
+class PrivateKeyTest extends TestCase
+{
+    public function testNewPrivateKey()
+    {
         $configuration = ConfigurationBuilder::builder();
         $privateKey = PrivateKey::newPrivateKey($configuration);
         $this->assertTrue(true);
     }
 
-    function testNewPrivateKeyWithBogusConfigurationThrowsCryptographyException() {
+    public function testNewPrivateKeyWithBogusConfigurationThrowsCryptographyException()
+    {
         $this->expectException(CryptographyException::class);
 
         $configuration = $this->getMockBuilder(ConfigurationBuilder::class)->getMock();
         $configuration->method('build')->willReturn([
-                'private_key_bits' => 0
+            'private_key_bits' => 0,
         ]);
         $privateKey = PrivateKey::newPrivateKey($configuration);
         $this->assertTrue(true);
     }
 
-    function testCreateFromFile() {
+    public function testCreateFromFile()
+    {
         $path = __DIR__ . '/../../../resources/elephant.key';
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
         $this->assertTrue(true);
     }
 
-    function testCreateFromFileWithPassword() {
+    public function testCreateFromFileWithPassword()
+    {
         // TODO
         $this->markTestSkipped();
     }
 
-    function testCreateFromFileThrowsCryptographyException() {
+    public function testCreateFromFileThrowsCryptographyException()
+    {
         $this->expectException(CryptographyException::class);
 
         $path = '/dev/null';
@@ -44,7 +49,8 @@ class PrivateKeyTest extends TestCase {
         PrivateKey::createFromFile($file);
     }
 
-    function testGetDetails() {
+    public function testGetDetails()
+    {
         $path = __DIR__ . '/../../../resources/elephant.key';
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
@@ -52,7 +58,8 @@ class PrivateKeyTest extends TestCase {
         $this->assertTrue(true);
     }
 
-    function testExport() {
+    public function testExport()
+    {
         $path = __DIR__ . '/../../../resources/elephant.key';
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
@@ -65,7 +72,8 @@ class PrivateKeyTest extends TestCase {
         $this->assertStringEndsWith($prefix = 'PRIVATE KEY-----', trim($export));
     }
 
-    function testExportToFile() {
+    public function testExportToFile()
+    {
         $path = __DIR__ . '/../../../resources/elephant.key';
         $file = new SplFileInfo($path);
         $key = PrivateKey::createFromFile($file);
