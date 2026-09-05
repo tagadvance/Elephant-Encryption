@@ -38,7 +38,7 @@ DATA;
         $publicKey = PublicKey::createFromCertificate($certificate);
 
         $privateKeyCryptographer = Base64Cryptographer::create(new PrivateKeyCryptographer($privateKey));
-        $publicKeyCryptographer = Base64Cryptographer::create(new PublicKeyCryptographer($privateKey, $publicKey));
+        $publicKeyCryptographer = Base64Cryptographer::create(new PublicKeyCryptographer($publicKey));
 
         $encryptedData = $privateKeyCryptographer->encrypt($data);
         $decryptedData = $publicKeyCryptographer->decrypt($encryptedData);

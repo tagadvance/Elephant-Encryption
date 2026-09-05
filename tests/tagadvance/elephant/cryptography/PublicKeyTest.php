@@ -27,7 +27,7 @@ class PublicKeyTest extends TestCase
     {
         $publicKey = $this->newPublicKey();
 
-        $expected = $publicKey->calculateDecryptSize() - OpenSSL::PADDING;
+        $expected = $publicKey->calculateDecryptSize() - OpenSSL::OAEP_PADDING;
         $this->assertSame($expected, $publicKey->calculateEncryptSize());
     }
 

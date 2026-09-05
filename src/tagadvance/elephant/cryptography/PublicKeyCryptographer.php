@@ -6,24 +6,16 @@ class PublicKeyCryptographer extends AbstractCryptographer
 {
     /**
      *
-     * @var PrivateKey
-     */
-    private PrivateKey $privateKey;
-
-    /**
-     *
      * @var PublicKey
      */
     private PublicKey $publicKey;
 
     /**
      *
-     * @param PrivateKey $privateKey
      * @param PublicKey $publicKey
      */
-    public function __construct(PrivateKey $privateKey, PublicKey $publicKey)
+    public function __construct(PublicKey $publicKey)
     {
-        $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
     }
 
@@ -47,7 +39,7 @@ class PublicKeyCryptographer extends AbstractCryptographer
         $function = function ($input, &$output) use (&$key) {
             return openssl_public_encrypt($input, $output, $key, OPENSSL_PKCS1_OAEP_PADDING);
         };
-        $size = $this->privateKey->calculateDecryptSize() - OpenSSL::OAEP_PADDING;
+        $size = $this->publicKey->calculateEncryptSize();
         return $this->doCrypt($function, $data, $size);
     }
 
@@ -62,7 +54,7 @@ class PublicKeyCryptographer extends AbstractCryptographer
         $function = function ($input, &$output) use (&$key) {
             return openssl_public_decrypt($input, $output, $key);
         };
-        $size = $this->privateKey->calculateDecryptSize();
+        $size = $this->publicKey->calculateDecryptSize();
         return $this->doCrypt($function, $data, $size);
     }
 

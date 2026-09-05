@@ -45,12 +45,15 @@ class PublicKey
     }
 
     /**
+     * Public-key encryption uses OAEP, so the overhead is OAEP's and not PKCS #1 v1.5's.
+     * PrivateKey::calculateEncryptSize() subtracts the smaller PADDING because
+     * private-key encryption is a v1.5 signature operation.
      *
      * @return int
      */
     public function calculateEncryptSize(): int
     {
-        return $this->calculateDecryptSize() - OpenSSL::PADDING;
+        return $this->calculateDecryptSize() - OpenSSL::OAEP_PADDING;
     }
 
     /**
