@@ -9,11 +9,7 @@ use tagadvance\gilligan\io\File;
 
 class Certificate
 {
-    /**
-     *
-     * @var resource
-     */
-    private $certificate;
+    private OpenSSLCertificate $certificate;
 
     /**
      *
@@ -42,11 +38,7 @@ class Certificate
         $this->certificate = $certificate;
     }
 
-    /**
-     *
-     * @return resource
-     */
-    public function getCertificate()
+    public function getCertificate(): OpenSSLCertificate
     {
         return $this->certificate;
     }

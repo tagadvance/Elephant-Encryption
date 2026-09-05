@@ -27,7 +27,7 @@ class ConfigurationBuilder
     /**
      * FIXME: windows
      *
-     * @var string
+     * @var string|null
      */
     public const CONFIG_WINDOWS = null;
 

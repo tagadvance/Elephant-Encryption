@@ -9,11 +9,7 @@ use Throwable;
 
 class CertificateSigningRequest
 {
-    /**
-     *
-     * @var resource
-     */
-    private $csr;
+    private OpenSSLCertificateSigningRequest $csr;
 
     /**
      *

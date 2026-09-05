@@ -8,11 +8,7 @@ use Throwable;
 
 class PrivateKey
 {
-    /**
-     *
-     * @var resource
-     */
-    private $key;
+    private OpenSSLAsymmetricKey $key;
 
     /**
      *
@@ -63,11 +59,7 @@ class PrivateKey
         $this->key = $key;
     }
 
-    /**
-     *
-     * @return resource
-     */
-    public function getKey()
+    public function getKey(): OpenSSLAsymmetricKey
     {
         return $this->key;
     }
