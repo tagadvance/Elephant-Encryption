@@ -39,6 +39,14 @@ class PublicKeyTest extends TestCase
         $this->assertSame($bits / 8, $publicKey->calculateDecryptSize());
     }
 
+    public function testCalculateDecryptSizeRoundsUpToWholeBytes()
+    {
+        $key = $this->createPartialMock(PublicKey::class, ['getDetails']);
+        $key->expects($this->once())->method('getDetails')->willReturn(['bits' => 2049]);
+
+        $this->assertSame(257, $key->calculateDecryptSize());
+    }
+
     private function newPublicKey(): PublicKey
     {
         $builder = new ArrayBuilder([]);

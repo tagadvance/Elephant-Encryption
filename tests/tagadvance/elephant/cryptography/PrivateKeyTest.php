@@ -57,6 +57,14 @@ class PrivateKeyTest extends TestCase
         $this->assertArrayHasKey('bits', $details);
     }
 
+    public function testCalculateDecryptSizeRoundsUpToWholeBytes()
+    {
+        $key = $this->createPartialMock(PrivateKey::class, ['getDetails']);
+        $key->expects($this->once())->method('getDetails')->willReturn(['bits' => 2049]);
+
+        $this->assertSame(257, $key->calculateDecryptSize());
+    }
+
     public function testExport()
     {
         $path = __DIR__ . '/../../../resources/elephant.key';

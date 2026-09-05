@@ -96,7 +96,8 @@ class PrivateKey
     {
         $details = $this->getDetails();
         $bits = $details['bits'];
-        return $bits / $bitsPerByte = 8;
+        $bitsPerByte = 8;
+        return intdiv($bits + $bitsPerByte - 1, $bitsPerByte);
     }
 
     /**
