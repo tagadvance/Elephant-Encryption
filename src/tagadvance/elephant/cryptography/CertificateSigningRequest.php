@@ -5,7 +5,6 @@ namespace tagadvance\elephant\cryptography;
 use OpenSSLCertificateSigningRequest;
 use SplFileInfo;
 use tagadvance\elephant\cryptography\distinguishedname\ArrayBuilder;
-use Throwable;
 
 class CertificateSigningRequest
 {
@@ -22,11 +21,12 @@ class CertificateSigningRequest
     {
         $dn = $builder->build();
         $key = $privateKey->getKey();
-        $csr = openssl_csr_new($dn, $key);
-        if ($csr !== false) {
-            return new self($csr);
-        }
-        throw new CryptographyException('could not create certificate signing request');
+        $csr = OpenSSL::call(
+            fn() => openssl_csr_new($dn, $key),
+            'could not create certificate signing request',
+        );
+
+        return new self($csr);
     }
 
     /**
@@ -47,15 +47,12 @@ class CertificateSigningRequest
      */
     public function sign(PrivateKey $privateKey, int $days = 365): Certificate
     {
-        try {
-            $certificate = openssl_csr_sign($this->csr, $cacert = null, $privateKey->getKey(), $days);
-            if ($certificate !== false) {
-                return new Certificate($certificate);
-            }
-        } catch (Throwable $t) {
-            throw new CryptographyException('could not sign certificate signing request', $code = 0, $t);
-        }
-        throw new CryptographyException('could not sign certificate signing request');
+        $certificate = OpenSSL::call(
+            fn() => openssl_csr_sign($this->csr, $cacert = null, $privateKey->getKey(), $days),
+            'could not sign certificate signing request',
+        );
+
+        return new Certificate($certificate);
     }
 
     /**
@@ -67,10 +64,13 @@ class CertificateSigningRequest
     public function export(bool $includeHumanReadableInformation = false): string
     {
         $out = '';
-        $isExported = openssl_csr_export($this->csr, $out, ! $includeHumanReadableInformation);
-        if (! $isExported) {
-            throw new CryptographyException('certificate signing request could not be exported');
-        }
+        OpenSSL::call(
+            function () use (&$out, $includeHumanReadableInformation) {
+                return openssl_csr_export($this->csr, $out, ! $includeHumanReadableInformation);
+            },
+            'certificate signing request could not be exported',
+        );
+
         return $out;
     }
 
@@ -83,10 +83,10 @@ class CertificateSigningRequest
     public function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void
     {
         $filePath = $file->getPathname();
-        $isExported = openssl_csr_export_to_file($this->csr, $filePath, ! $includeHumanReadableInformation);
-        if (! $isExported) {
-            throw new CryptographyException('certificate signing request could not be saved');
-        }
+        OpenSSL::call(
+            fn() => openssl_csr_export_to_file($this->csr, $filePath, ! $includeHumanReadableInformation),
+            'certificate signing request could not be saved',
+        );
     }
 
 }

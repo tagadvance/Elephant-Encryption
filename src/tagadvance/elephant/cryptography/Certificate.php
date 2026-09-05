@@ -20,11 +20,12 @@ class Certificate
     {
         $path = $file->getRealPath();
         $filePath = "file://$path";
-        $certificate = openssl_x509_read($filePath);
-        if ($certificate !== false) {
-            return new self($certificate);
-        }
-        throw new CryptographyException('could not read resource');
+        $certificate = OpenSSL::call(
+            fn() => openssl_x509_read($filePath),
+            'could not read resource',
+        );
+
+        return new self($certificate);
     }
 
     /**
@@ -51,11 +52,14 @@ class Certificate
     public function export(bool $includeHumanReadableInformation = false): string
     {
         $output = '';
-        $isExported = openssl_x509_export($this->certificate, $output, ! $includeHumanReadableInformation);
-        if ($isExported) {
-            return $output;
-        }
-        throw new CryptographyException();
+        OpenSSL::call(
+            function () use (&$output, $includeHumanReadableInformation) {
+                return openssl_x509_export($this->certificate, $output, ! $includeHumanReadableInformation);
+            },
+            'certificate could not be exported',
+        );
+
+        return $output;
     }
 
     /**
@@ -67,10 +71,10 @@ class Certificate
     public function exportToFile(SplFileInfo $file, bool $includeHumanReadableInformation = false): void
     {
         $filePath = $file->getPathname();
-        $isExported = openssl_x509_export_to_file($this->certificate, $filePath, ! $includeHumanReadableInformation);
-        if (! $isExported) {
-            throw new CryptographyException('certificate could not be saved');
-        }
+        OpenSSL::call(
+            fn() => openssl_x509_export_to_file($this->certificate, $filePath, ! $includeHumanReadableInformation),
+            'certificate could not be saved',
+        );
     }
 
 }

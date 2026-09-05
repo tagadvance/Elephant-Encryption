@@ -19,11 +19,14 @@ class PublicKey
     public static function createFromCertificate(Certificate $certificate): self
     {
         $key = '';
-        $isExported = openssl_x509_export($certificate->getCertificate(), $key);
-        if ($isExported) {
-            return new self($key);
-        }
-        throw new CryptographyException('could not create public key from certificate');
+        OpenSSL::call(
+            function () use ($certificate, &$key) {
+                return openssl_x509_export($certificate->getCertificate(), $key);
+            },
+            'could not create public key from certificate',
+        );
+
+        return new self($key);
     }
 
     /**
@@ -64,15 +67,15 @@ class PublicKey
      */
     public function getDetails(): array
     {
-        $key = openssl_pkey_get_public($this->key);
-        if ($key === false) {
-            throw new CryptographyException('could not read public key');
-        }
-        $details = openssl_pkey_get_details($key);
-        if ($details === false) {
-            throw new CryptographyException('could not get details');
-        }
-        return $details;
+        $key = OpenSSL::call(
+            fn() => openssl_pkey_get_public($this->key),
+            'could not read public key',
+        );
+
+        return OpenSSL::call(
+            fn() => openssl_pkey_get_details($key),
+            'could not get details',
+        );
     }
 
     /**

@@ -31,7 +31,7 @@ class PrivateKeyCryptographer extends AbstractCryptographer
             return openssl_private_encrypt($input, $output, $key);
         };
         $size = $this->key->calculateEncryptSize();
-        return $this->doCrypt($function, $data, $size);
+        return $this->doCrypt($function, $data, $size, 'could not encrypt data with the private key');
     }
 
     /**
@@ -46,7 +46,7 @@ class PrivateKeyCryptographer extends AbstractCryptographer
             return openssl_private_decrypt($input, $output, $key, OPENSSL_PKCS1_OAEP_PADDING);
         };
         $size = $this->key->calculateDecryptSize();
-        return $this->doCrypt($function, $data, $size);
+        return $this->doCrypt($function, $data, $size, 'could not decrypt data with the private key');
     }
 
 }

@@ -4,7 +4,6 @@ namespace tagadvance\elephant\cryptography;
 
 use OpenSSLAsymmetricKey;
 use SplFileInfo;
-use Throwable;
 
 class PrivateKey
 {
@@ -20,16 +19,12 @@ class PrivateKey
     public static function newPrivateKey(ConfigurationBuilder $builder): self
     {
         $configArgs = $builder->build();
-        try {
-            $key = openssl_pkey_new($configArgs);
-            if ($key !== false) {
-                return new self($key);
-            }
-        } catch (Throwable $t) {
-            throw new CryptographyException('could not create private key', $code = 0, $t);
-        }
+        $key = OpenSSL::call(
+            fn() => openssl_pkey_new($configArgs),
+            'could not create private key',
+        );
 
-        throw new CryptographyException('could not create private key');
+        return new self($key);
     }
 
     /**
@@ -43,11 +38,12 @@ class PrivateKey
     {
         $path = $file->getRealPath();
         $filePath = "file://$path";
-        $key = openssl_pkey_get_private($filePath, $password);
-        if ($key !== false) {
-            return new self($key);
-        }
-        throw new CryptographyException('key could not be read');
+        $key = OpenSSL::call(
+            fn() => openssl_pkey_get_private($filePath, $password),
+            'key could not be read',
+        );
+
+        return new self($key);
     }
 
     /**
@@ -72,11 +68,10 @@ class PrivateKey
      */
     public function getDetails(): array
     {
-        $details = openssl_pkey_get_details($this->key);
-        if ($details === false) {
-            throw new CryptographyException('could not get details');
-        }
-        return $details;
+        return OpenSSL::call(
+            fn() => openssl_pkey_get_details($this->key),
+            'could not get details',
+        );
     }
 
     /**
@@ -109,11 +104,14 @@ class PrivateKey
     public function export(?string $password = null, ?array $configuration = null): string
     {
         $output = '';
-        $isExported = openssl_pkey_export($this->key, $output, $password, $configuration);
-        if ($isExported) {
-            return $output;
-        }
-        throw new CryptographyException('private key could not be exported');
+        OpenSSL::call(
+            function () use (&$output, $password, $configuration) {
+                return openssl_pkey_export($this->key, $output, $password, $configuration);
+            },
+            'private key could not be exported',
+        );
+
+        return $output;
     }
 
     /**
@@ -126,10 +124,10 @@ class PrivateKey
     public function exportToFile(SplFileInfo $file, ?string $password = null, ?array $configuration = null): void
     {
         $path = $file->getPathname();
-        $result = openssl_pkey_export_to_file($this->key, $path, $password, $configuration);
-        if (! $result) {
-            throw new CryptographyException('private key could not be saved');
-        }
+        OpenSSL::call(
+            fn() => openssl_pkey_export_to_file($this->key, $path, $password, $configuration),
+            'private key could not be saved',
+        );
     }
 
 }
