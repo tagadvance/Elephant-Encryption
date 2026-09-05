@@ -46,7 +46,11 @@ class Base64Cryptographer implements Cryptographer
      */
     public function decrypt(string $data): string
     {
-        return $this->delegate->decrypt(base64_decode($data));
+        $decoded = base64_decode($data, $strict = true);
+        if ($decoded === false) {
+            throw new CryptographyException('input is not valid base64');
+        }
+        return $this->delegate->decrypt($decoded);
     }
 
 }
