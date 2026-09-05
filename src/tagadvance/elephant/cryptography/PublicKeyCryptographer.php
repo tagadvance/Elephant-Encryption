@@ -47,7 +47,7 @@ class PublicKeyCryptographer extends AbstractCryptographer
         $function = function ($input, &$output) use (&$key) {
             return openssl_public_encrypt($input, $output, $key, OPENSSL_PKCS1_OAEP_PADDING);
         };
-        $size = $this->privateKey->calculateEncryptSize();
+        $size = $this->privateKey->calculateDecryptSize() - OpenSSL::OAEP_PADDING;
         return $this->doCrypt($function, $data, $size);
     }
 

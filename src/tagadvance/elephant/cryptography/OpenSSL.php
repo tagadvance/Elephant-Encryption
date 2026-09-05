@@ -16,6 +16,13 @@ class OpenSSL
      */
     public const PADDING = 11;
 
+    /**
+     * Overhead of OAEP padding with the default SHA-1 hash: 2 * 20 + 2.
+     *
+     * @var integer bytes - 336 bits
+     */
+    public const OAEP_PADDING = 42;
+
     private function __construct() {}
 
     /**
