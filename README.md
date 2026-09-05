@@ -1,4 +1,5 @@
 [![CI](https://github.com/tagadvance/Elephant-Encryption/actions/workflows/ci.yml/badge.svg)](https://github.com/tagadvance/Elephant-Encryption/actions/workflows/ci.yml)
+[![Packagist](https://img.shields.io/packagist/v/tagadvance/elephant.svg)](https://packagist.org/packages/tagadvance/elephant)
 [![PHP](https://img.shields.io/badge/php-%3E%3D8.4-777bb4.svg)](https://www.php.net/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -12,12 +13,12 @@ The goal was and is to create a well-structured, strongly-typed library to wrap 
 ## Download / Install
 The easiest way to install Elephant Encryption is via Composer:
 ```bash
-composer require "tagadvance/elephant:dev-master"
+composer require "tagadvance/elephant:^1.0"
 ```
 ```json
 {
     "require": {
-        "tagadvance/elephant": "dev-master"
+        "tagadvance/elephant": "^1.0"
     }
 }
 ```
