@@ -1,0 +1,7 @@
+parameters:
+  # Level 6 (missing type hints, iterable value types) reports 61 errors. That
+  # is the next ratchet, not a regression.
+  level: 5
+  paths:
+    - src
+    - tests
