@@ -3,7 +3,6 @@
 namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
-use tagadvance\gilligan\security\Hash;
 
 class ConfigurationBuilderTest extends TestCase
 {
@@ -11,7 +10,7 @@ class ConfigurationBuilderTest extends TestCase
     {
         $expected = [
             'config' => ConfigurationBuilder::CONFIG_DEBIAN,
-            'digest_alg' => Hash::ALGORITHM_SHA512,
+            'digest_alg' => 'sha512',
             'x509_extensions' => 'v3_ca',
             'req_extensions' => 'v3_req',
             'private_key_bits' => 4096,
@@ -21,7 +20,7 @@ class ConfigurationBuilderTest extends TestCase
         ];
         $configuration = ConfigurationBuilder::builder()
                 ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
-                ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
+                ->setDigestAlgorithm('sha512')
                 ->setX509Extensions('v3_ca')
                 ->setRequiredExtensions('v3_req')
                 ->setPrivateKeyBits(4096)

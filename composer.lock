@@ -4,56 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a07462696eb2b1b51fc1ee7bdbae853",
-    "packages": [
-        {
-            "name": "tagadvance/gilligan",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tagadvance/Gilligan.git",
-                "reference": "f05fe624c10582933019b09ffdf98f39bded0b6b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tagadvance/Gilligan/zipball/f05fe624c10582933019b09ffdf98f39bded0b6b",
-                "reference": "f05fe624c10582933019b09ffdf98f39bded0b6b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-apcu": "*",
-                "ext-bcmath": "*",
-                "ext-spl": "*",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10.5.2"
-            },
-            "default-branch": true,
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tag",
-                    "email": "tagadvance+gilligan@gmail.com"
-                }
-            ],
-            "description": "...",
-            "support": {
-                "issues": "https://github.com/tagadvance/Gilligan/issues",
-                "source": "https://github.com/tagadvance/Gilligan/tree/master"
-            },
-            "time": "2023-12-10T01:48:21+00:00"
-        }
-    ],
+    "content-hash": "7c31b1d1256684fac57b4298eda8025f",
+    "packages": [],
     "packages-dev": [
         {
             "name": "clue/ndjson-react",
@@ -4797,9 +4749,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "tagadvance/gilligan": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -4,7 +4,6 @@ namespace tagadvance\elephant\cryptography;
 
 use PHPUnit\Framework\TestCase;
 use tagadvance\elephant\cryptography\distinguishedname\DistinguishedNameBuilder;
-use tagadvance\gilligan\security\Hash;
 
 class CryptographyTest extends TestCase
 {
@@ -19,7 +18,7 @@ DATA;
 
         $configuration = ConfigurationBuilder::builder()
                 ->setConfigurationFile(ConfigurationBuilder::CONFIG_DEBIAN)
-                ->setDigestAlgorithm(Hash::ALGORITHM_SHA512)
+                ->setDigestAlgorithm('sha512')
                 ->setX509Extensions('v3_ca')
                 ->setRequiredExtensions('v3_req')
                 ->setPrivateKeyBits(4096)
