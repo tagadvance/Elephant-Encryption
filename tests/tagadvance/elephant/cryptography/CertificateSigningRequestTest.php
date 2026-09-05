@@ -37,9 +37,7 @@ class CertificateSigningRequestTest extends TestCase
     {
         $this->expectException(CryptographyException::class);
 
-        $key = $this->getMockBuilder(PrivateKey::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $key = $this->createStub(PrivateKey::class);
         $this->csr->sign($key);
     }
 

@@ -18,7 +18,7 @@ class PrivateKeyTest extends TestCase
     {
         $this->expectException(CryptographyException::class);
 
-        $configuration = $this->getMockBuilder(ConfigurationBuilder::class)->getMock();
+        $configuration = $this->createStub(ConfigurationBuilder::class);
         $configuration->method('build')->willReturn([
             'private_key_bits' => 0,
         ]);
