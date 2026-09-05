@@ -35,8 +35,41 @@ class PrivateKeyTest extends TestCase
 
     public function testCreateFromFileWithPassword()
     {
-        // TODO
-        $this->markTestSkipped();
+        $password = 'correct horse battery staple';
+        $file = $this->exportEncryptedKey($password);
+
+        try {
+            $key = PrivateKey::createFromFile($file, $password);
+            $this->assertInstanceOf(PrivateKey::class, $key);
+        } finally {
+            unlink($file->getPathname());
+        }
+    }
+
+    public function testCreateFromFileWithWrongPasswordThrowsCryptographyException()
+    {
+        $file = $this->exportEncryptedKey('correct horse battery staple');
+
+        try {
+            $this->expectException(CryptographyException::class);
+            PrivateKey::createFromFile($file, 'hunter2');
+        } finally {
+            unlink($file->getPathname());
+        }
+    }
+
+    private function exportEncryptedKey(string $password): SplFileInfo
+    {
+        $path = __DIR__ . '/../../../resources/elephant.key';
+        $key = PrivateKey::createFromFile(new SplFileInfo($path));
+
+        $file = new SplFileInfo(tempnam(sys_get_temp_dir(), 'elephant'));
+        $key->exportToFile($file, $password);
+
+        $contents = file_get_contents($file->getPathname());
+        $this->assertStringStartsWith('-----BEGIN ENCRYPTED PRIVATE KEY-----', $contents);
+
+        return $file;
     }
 
     public function testCreateFromFileThrowsCryptographyException()
